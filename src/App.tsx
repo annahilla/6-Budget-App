@@ -12,23 +12,25 @@ function App() {
         <Navbar />
         <Header />
 
-        {options &&
-          options.map(
-            (option: {
-              id: number;
-              title: string;
-              description: string;
-              price: number;
-            }) => (
-              <Card
-                key={option.id}
-                id={option.id}
-                title={option.title}
-                description={option.description}
-                price={option.price}
-              />
-            )
-          )}
+        <div className="flex flex-col gap-4">
+          {options &&
+            options.map(
+              (option: {
+                id: number;
+                title: string;
+                description: string;
+                price: number;
+              }) => (
+                <Card
+                  key={option.id}
+                  id={option.id}
+                  title={option.title}
+                  description={option.description}
+                  price={option.price}
+                />
+              )
+            )}
+        </div>
 
         <PriceCount />
       </main>

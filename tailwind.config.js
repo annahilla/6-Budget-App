@@ -8,7 +8,8 @@ export default {
     extend: {
       colors: {
         orange: '#e1572f',
-        brown: '#6d3d1a'
+        brown: '#6d3d1a',
+        green: '#31865d'
       },
       backgroundImage: {
         "header": "url('assets/header.png')"

@@ -6,14 +6,21 @@ import options from "./data/options.json";
 
 function App() {
   return (
-    <main className="mx-20 my-8">
+    <main className="mx-10 md:mx-20 my-8">
       <Navbar />
       <Header />
 
       {options &&
         options.map(
-          (option: { title: string; description: string; price: number }) => (
+          (option: {
+            id: number;
+            title: string;
+            description: string;
+            price: number;
+          }) => (
             <Card
+              key={option.id}
+              id={option.id}
               title={option.title}
               description={option.description}
               price={option.price}

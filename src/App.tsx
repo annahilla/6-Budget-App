@@ -1,3 +1,4 @@
+import { PriceProvider } from "./context/PriceContext";
 import Navbar from "./components/Navbar";
 import Header from "./components/Header";
 import Card from "./components/Card";
@@ -6,30 +7,32 @@ import options from "./data/options.json";
 
 function App() {
   return (
-    <main className="mx-10 md:mx-20 my-8">
-      <Navbar />
-      <Header />
+    <PriceProvider>
+      <main className="mx-10 my-8 md:mx-20">
+        <Navbar />
+        <Header />
 
-      {options &&
-        options.map(
-          (option: {
-            id: number;
-            title: string;
-            description: string;
-            price: number;
-          }) => (
-            <Card
-              key={option.id}
-              id={option.id}
-              title={option.title}
-              description={option.description}
-              price={option.price}
-            />
-          )
-        )}
+        {options &&
+          options.map(
+            (option: {
+              id: number;
+              title: string;
+              description: string;
+              price: number;
+            }) => (
+              <Card
+                key={option.id}
+                id={option.id}
+                title={option.title}
+                description={option.description}
+                price={option.price}
+              />
+            )
+          )}
 
-      <PriceCount />
-    </main>
+        <PriceCount />
+      </main>
+    </PriceProvider>
   );
 }
 

@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { usePriceContext } from "../context/PriceContext";
 import WebsiteCustomization from "./WebsiteCustomization";
 
@@ -6,33 +6,47 @@ const Card = ({
   id,
   title,
   description,
-  price,
+  price
 }: {
   id: number;
   title: string;
   description: string;
-  price: number;
+  price: number
 }) => {
   const [isChecked, setIsChecked] = useState(false);
-  const { totalPrice, updatePrice } = usePriceContext();
+  const [localNumPages, setLocalNumPages] = useState(0);
+  const [localNumLanguages, setLocalNumLanguages] = useState(0);
+  const { updateWebPrice, updateNumExtras, updateNumPages, updateNumLanguages } = usePriceContext();
+
+  useEffect(() => {
+    updateNumExtras(localNumPages + localNumLanguages);
+   }, [localNumPages, localNumLanguages])
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setIsChecked(checked);
     if (checked) {
-      updatePrice(price);
+      updateWebPrice(price);
     } else {
-      updatePrice(-price);
+      updateWebPrice(-price);
     }
-    console.log(totalPrice);
   };
 
-  const checkedStyles = isChecked
-    ? "border-2 border-green h-60 justify-start"
-    : " justify-center";
+  const handleNumPagesChange = (inputValue: number) => {
+    setLocalNumPages(inputValue);
+    updateNumPages(inputValue);
+  }
+
+  const handleNumLanguagesChange = (inputValue: number) => {
+    setLocalNumLanguages(inputValue);
+    updateNumLanguages(inputValue);
+  }
+
+  const checkedStyles = isChecked && "border-2 border-green h-60 justify-start";
 
   return (
     <div
+      id={`${title.toLocaleLowerCase()}Card`}
       className={`shadow-lg rounded-2xl p-10 flex flex-col text-center gap-7 m-auto md:w-2/3 ${checkedStyles}`}
     >
       <div className="flex flex-col justify-start items-center gap-10 w-100 md:flex-row md:justify-between md:text-left">
@@ -54,7 +68,7 @@ const Card = ({
           </div>
         </div>
       </div>
-      <div className="self-end">{isChecked && <WebsiteCustomization />}</div>
+      <div className="self-end">{isChecked && <WebsiteCustomization updateNumPages={handleNumPagesChange} updateNumLanguages={handleNumLanguagesChange} numPages={localNumPages} numLanguages={localNumLanguages} />}</div>
     </div>
   );
 };

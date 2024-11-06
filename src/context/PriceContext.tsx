@@ -96,10 +96,6 @@ export const PriceProvider = ({ children }: Props) => {
     );
   };
 
-  useEffect(() => {
-    console.log(selectedCards);
-  }, [selectedCards]);
-
   return (
     <PriceContext.Provider
       value={{

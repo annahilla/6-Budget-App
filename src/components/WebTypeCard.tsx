@@ -21,7 +21,6 @@ const WebTypeCard = ({
     updateWebPrice,
     updateCardOptions,
     addSelectedCard,
-    selectedCards,
     removeSelectedCard,
   } = usePriceContext();
 
@@ -50,8 +49,6 @@ const WebTypeCard = ({
         extrasPrice: 0,
       });
     }
-
-    console.log(selectedCards);
   };
 
   const handleNumPagesChange = (inputValue: number) => {

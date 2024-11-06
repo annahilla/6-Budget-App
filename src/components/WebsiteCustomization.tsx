@@ -1,16 +1,12 @@
-
 import NumberInput from "./NumberInput";
 
 const WebsiteCustomization = ({
   updateNumPages,
   updateNumLanguages,
 }: {
-  updateNumPages: (inputValue: number) => void, 
-  updateNumLanguages: (inputValue: number) => void, 
+  updateNumPages: (inputValue: number) => void;
+  updateNumLanguages: (inputValue: number) => void;
 }) => {
-  
-
-
   return (
     <form className="flex flex-col items-end gap-4">
       <div className="flex gap-4">

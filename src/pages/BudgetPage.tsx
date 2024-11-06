@@ -1,5 +1,6 @@
 import Card from "../components/Card";
 import Header from "../components/Header";
+import Button from "../components/Button";
 import PriceCount from "../components/PriceCount";
 import { PriceProvider } from "../context/PriceContext";
 import options from "../data/options.json";
@@ -7,7 +8,10 @@ import options from "../data/options.json";
 const BudgetPage = () => {
     return(
         <PriceProvider>
-        <Header />
+        <Header title="Aconsegueix la millor qualitat" />
+
+       
+
 
         <div className="flex flex-col gap-4">
           {options &&
@@ -28,7 +32,6 @@ const BudgetPage = () => {
               )
             )}
         </div>
-
         <PriceCount />
     </PriceProvider>
     )

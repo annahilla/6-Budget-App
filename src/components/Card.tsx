@@ -43,12 +43,12 @@ const Card = ({
     }
   };
 
-  const handleNumPagesChange = (inputValue: string) => {
-    setNumPages(parseInt(inputValue));
+  const handleNumPagesChange = (inputValue: number) => {
+    setNumPages(inputValue);
   };
 
-  const handleNumLanguagesChange = (inputValue: string) => {
-    setNumLanguages(parseInt(inputValue));
+  const handleNumLanguagesChange = (inputValue: number) => {
+    setNumLanguages(inputValue);
   };
 
   const checkedStyles = isChecked && "border-2 border-green h-60 justify-start";
@@ -82,8 +82,6 @@ const Card = ({
           <WebsiteCustomization
             updateNumPages={handleNumPagesChange}
             updateNumLanguages={handleNumLanguagesChange}
-            numPages={numPages}
-            numLanguages={numLanguages}
           />
         )}
       </div>

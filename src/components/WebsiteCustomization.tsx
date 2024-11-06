@@ -3,14 +3,10 @@ import NumberInput from "./NumberInput";
 
 const WebsiteCustomization = ({
   updateNumPages,
-  updateNumLanguages, 
-  numPages, 
-  numLanguages
+  updateNumLanguages,
 }: {
-  updateNumPages: (inputValue: string) => void, 
-  updateNumLanguages: (inputValue: string) => void, 
-  numPages: number, 
-  numLanguages: number
+  updateNumPages: (inputValue: number) => void, 
+  updateNumLanguages: (inputValue: number) => void, 
 }) => {
   
 
@@ -19,11 +15,11 @@ const WebsiteCustomization = ({
     <form className="flex flex-col items-end gap-4">
       <div className="flex gap-4">
         <label>Nombre de pàgines</label>
-        <NumberInput updateExtras={updateNumPages} numExtras={numPages}/>
+        <NumberInput updateExtras={updateNumPages} />
       </div>
       <div className="flex gap-4">
         <label>Nombre de llenguatges</label>
-        <NumberInput updateExtras={updateNumLanguages} numExtras={numLanguages}/>
+        <NumberInput updateExtras={updateNumLanguages} />
       </div>
     </form>
   );

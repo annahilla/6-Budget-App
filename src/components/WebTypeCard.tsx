@@ -7,24 +7,30 @@ const WebTypeCard = ({
   id,
   title,
   description,
-  price
+  price,
 }: {
   id: number;
   title: string;
   description: string;
-  price: number
+  price: number;
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [numPages, setNumPages] = useState(0);
   const [numLanguages, setNumLanguages] = useState(0);
-  const { updateWebPrice, updateCardOptions } = usePriceContext();
+  const {
+    updateWebPrice,
+    updateCardOptions,
+    addSelectedCard,
+    selectedCards,
+    removeSelectedCard,
+  } = usePriceContext();
 
   useEffect(() => {
     updateCardOptions({
       title: title,
       numPages: numPages,
       numLanguages: numLanguages,
-      extrasPrice: (numPages + numLanguages) * 30
+      extrasPrice: (numPages + numLanguages) * 30,
     });
   }, [numPages, numLanguages]);
 
@@ -33,15 +39,19 @@ const WebTypeCard = ({
     setIsChecked(checked);
     if (checked) {
       updateWebPrice(price);
+      addSelectedCard(id);
     } else {
       updateWebPrice(-price);
+      removeSelectedCard(id);
       updateCardOptions({
         title: title,
         numPages: 0,
         numLanguages: 0,
-        extrasPrice: 0
+        extrasPrice: 0,
       });
     }
+
+    console.log(selectedCards);
   };
 
   const handleNumPagesChange = (inputValue: number) => {
@@ -52,16 +62,19 @@ const WebTypeCard = ({
     setNumLanguages(inputValue);
   };
 
-  const checkedStyles = isChecked && "border-2 border-green h-100 justify-start md:h-60";
+  const checkedStyles =
+    isChecked && "border-2 border-green h-100 justify-start md:h-60";
 
   return (
-    <Card conditionalStyles={checkedStyles}>
+    <Card styles={checkedStyles}>
       <div className="flex flex-col justify-start items-center gap-10 w-100 md:flex-row md:justify-between md:text-left">
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-2xl">{title}</h3>
           <p>{description}</p>
         </div>
-        <div className="font-bold text-3xl"><span className="font-extrabold text-4xl">{price}</span>€</div>
+        <div className="font-bold text-3xl">
+          <span className="font-extrabold text-4xl">{price}</span>€
+        </div>
         <div>
           <div className="flex items-center gap-2">
             <input

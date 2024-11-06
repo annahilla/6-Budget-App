@@ -8,6 +8,9 @@ interface PriceContextType {
   cardOptions: CardOptions[];
   updateWebPrice: (amount: number) => void;
   updateCardOptions: (props: CardOptions) => void;
+  selectedCards: number[];
+  addSelectedCard: (id: number) => void;
+  removeSelectedCard: (id: number) => void;
 }
 
 const PriceContext = createContext<PriceContextType>({
@@ -17,6 +20,9 @@ const PriceContext = createContext<PriceContextType>({
   cardOptions: [],
   updateWebPrice: () => {},
   updateCardOptions: () => {},
+  selectedCards: [],
+  addSelectedCard: () => {},
+  removeSelectedCard: () => {},
 });
 
 export const usePriceContext = () => {
@@ -39,6 +45,7 @@ export const PriceProvider = ({ children }: Props) => {
   const [totalPrice, setTotalPrice] = useState(0);
   const [webPrice, setWebPrice] = useState(0);
   const [totalExtrasPrice, setTotalExtrasPrice] = useState(0);
+  const [selectedCards, setSelectedCards] = useState<number[]>([]);
 
   const updateWebPrice = (amount: number) => {
     setWebPrice((prevPrice) => prevPrice + amount);
@@ -54,7 +61,9 @@ export const PriceProvider = ({ children }: Props) => {
           existingItem.numLanguages !== numLanguages
         ) {
           return prev.map((item) =>
-            item.title === title ? { ...item, numPages, numLanguages, extrasPrice } : item
+            item.title === title
+              ? { ...item, numPages, numLanguages, extrasPrice }
+              : item
           );
         } else {
           return prev;
@@ -66,9 +75,30 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
-    setTotalExtrasPrice(cardOptions.reduce((accumulator, card) => accumulator + card.extrasPrice, 0));
+    setTotalExtrasPrice(
+      cardOptions.reduce(
+        (accumulator, card) => accumulator + card.extrasPrice,
+        0
+      )
+    );
     setTotalPrice(webPrice + totalExtrasPrice);
   }, [cardOptions, webPrice, totalExtrasPrice]);
+
+  const addSelectedCard = (id: number) => {
+    setSelectedCards((prevSelected) =>
+      prevSelected.includes(id) ? prevSelected : [...prevSelected, id]
+    );
+  };
+
+  const removeSelectedCard = (id: number) => {
+    setSelectedCards((prevSelected) =>
+      prevSelected.filter((cardId) => cardId !== id)
+    );
+  };
+
+  useEffect(() => {
+    console.log(selectedCards);
+  }, [selectedCards]);
 
   return (
     <PriceContext.Provider
@@ -77,8 +107,11 @@ export const PriceProvider = ({ children }: Props) => {
         webPrice,
         totalExtrasPrice,
         cardOptions,
+        selectedCards,
         updateWebPrice,
         updateCardOptions,
+        addSelectedCard,
+        removeSelectedCard,
       }}
     >
       {children}

@@ -6,7 +6,6 @@ import PriceCount from "./components/PriceCount";
 import options from "./data/options.json";
 
 function App() {
-
   return (
     <PriceProvider>
       <main className="mx-10 my-8 md:mx-20">

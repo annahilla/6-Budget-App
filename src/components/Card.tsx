@@ -6,21 +6,31 @@ const Card = ({
   id,
   title,
   description,
-  price
+  price,
 }: {
   id: number;
   title: string;
   description: string;
-  price: number
+  price: number;
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [localNumPages, setLocalNumPages] = useState(0);
   const [localNumLanguages, setLocalNumLanguages] = useState(0);
-  const { updateWebPrice, updateNumExtras, updateNumPages, updateNumLanguages } = usePriceContext();
+  const { cardOptions, updateWebPrice, updateNumExtras, updateCardOptions } =
+    usePriceContext();
 
   useEffect(() => {
     updateNumExtras(localNumPages + localNumLanguages);
-   }, [localNumPages, localNumLanguages])
+  }, [localNumPages, localNumLanguages]);
+
+  useEffect(() => {
+    updateCardOptions({
+      title: title,
+      numPages: localNumPages,
+      numExtras: localNumLanguages,
+    });
+    console.log(cardOptions);
+  }, [localNumPages, localNumLanguages]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
@@ -34,13 +44,11 @@ const Card = ({
 
   const handleNumPagesChange = (inputValue: number) => {
     setLocalNumPages(inputValue);
-    updateNumPages(inputValue);
-  }
+  };
 
   const handleNumLanguagesChange = (inputValue: number) => {
     setLocalNumLanguages(inputValue);
-    updateNumLanguages(inputValue);
-  }
+  };
 
   const checkedStyles = isChecked && "border-2 border-green h-60 justify-start";
 
@@ -68,7 +76,16 @@ const Card = ({
           </div>
         </div>
       </div>
-      <div className="self-end">{isChecked && <WebsiteCustomization updateNumPages={handleNumPagesChange} updateNumLanguages={handleNumLanguagesChange} numPages={localNumPages} numLanguages={localNumLanguages} />}</div>
+      <div className="self-end">
+        {isChecked && (
+          <WebsiteCustomization
+            updateNumPages={handleNumPagesChange}
+            updateNumLanguages={handleNumLanguagesChange}
+            numPages={localNumPages}
+            numLanguages={localNumLanguages}
+          />
+        )}
+      </div>
     </div>
   );
 };

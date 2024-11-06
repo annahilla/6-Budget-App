@@ -1,18 +1,15 @@
-import Card from "../components/Card";
+import WebTypeCard from "../components/WebTypeCard";
 import Header from "../components/Header";
-import Button from "../components/Button";
 import PriceCount from "../components/PriceCount";
 import { PriceProvider } from "../context/PriceContext";
 import options from "../data/options.json";
+import FormCard from "../components/FormCard";
 
 const BudgetPage = () => {
+
     return(
         <PriceProvider>
         <Header title="Aconsegueix la millor qualitat" />
-
-       
-
-
         <div className="flex flex-col gap-4">
           {options &&
             options.map(
@@ -22,7 +19,7 @@ const BudgetPage = () => {
                 description: string;
                 price: number;
               }) => (
-                <Card
+                <WebTypeCard
                   key={option.id}
                   id={option.id}
                   title={option.title}
@@ -33,6 +30,7 @@ const BudgetPage = () => {
             )}
         </div>
         <PriceCount />
+        <FormCard />
     </PriceProvider>
     )
 }

@@ -25,13 +25,26 @@ const WebTypeCard = ({
   } = usePriceContext();
 
   useEffect(() => {
-    updateCardOptions({
-      title: title,
-      numPages: numPages,
-      numLanguages: numLanguages,
-      extrasPrice: (numPages + numLanguages) * 30,
-    });
-  }, [numPages, numLanguages]);
+    if (isChecked) {
+      updateCardOptions({
+        id: id,
+        title: title,
+        numPages: numPages,
+        numLanguages: numLanguages,
+        extrasPrice: (numPages + numLanguages) * 30,
+        remove: false,
+      });
+    } else {
+      updateCardOptions({
+        id: id,
+        title: title,
+        numPages: 0,
+        numLanguages: 0,
+        extrasPrice: 0,
+        remove: true,
+      });
+    }
+  }, [numPages, numLanguages, isChecked]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
@@ -42,12 +55,6 @@ const WebTypeCard = ({
     } else {
       updateWebPrice(-price);
       removeSelectedCard(id);
-      updateCardOptions({
-        title: title,
-        numPages: 0,
-        numLanguages: 0,
-        extrasPrice: 0,
-      });
     }
   };
 

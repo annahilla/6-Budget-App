@@ -4,20 +4,18 @@ import { createContext } from "react";
 interface PriceContextType {
   totalPrice: number;
   webPrice: number;
-  numExtras: number;
-  cardOptions: WebExtra[];
+  totalExtrasPrice: number;
+  cardOptions: CardOptions[];
   updateWebPrice: (amount: number) => void;
-  updateNumExtras: (amount: number) => void;
-  updateCardOptions: (props: WebExtra) => void;
+  updateCardOptions: (props: CardOptions) => void;
 }
 
 const PriceContext = createContext<PriceContextType>({
   totalPrice: 0,
   webPrice: 0,
-  numExtras: 0,
+  totalExtrasPrice: 0,
   cardOptions: [],
   updateWebPrice: () => {},
-  updateNumExtras: () => {},
   updateCardOptions: () => {},
 });
 
@@ -29,61 +27,57 @@ interface Props {
   children?: ReactNode;
 }
 
-interface WebExtra {
+interface CardOptions {
   title: string;
   numPages: number;
-  numExtras: number;
+  numLanguages: number;
+  extrasPrice: number;
 }
 
 export const PriceProvider = ({ children }: Props) => {
-  const [cardOptions, setCardOptions] = useState<WebExtra[]>([]);
+  const [cardOptions, setCardOptions] = useState<CardOptions[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [webPrice, setWebPrice] = useState(0);
-  const [numExtras, setNumExtras] = useState(0);
+  const [totalExtrasPrice, setTotalExtrasPrice] = useState(0);
 
   const updateWebPrice = (amount: number) => {
     setWebPrice((prevPrice) => prevPrice + amount);
   };
 
-  const updateNumExtras = (amount: number) => {
-    setNumExtras(amount);
-  };
-
-  const updateCardOptions = (props: WebExtra) => {
-    const { title, numPages, numExtras } = props;
+  const updateCardOptions = (props: CardOptions) => {
+    const { title, numPages, numLanguages, extrasPrice } = props;
     setCardOptions((prev) => {
       const existingItem = prev.find((item) => item.title === title);
       if (existingItem) {
         if (
           existingItem.numPages !== numPages ||
-          existingItem.numExtras !== numExtras
+          existingItem.numLanguages !== numLanguages
         ) {
           return prev.map((item) =>
-            item.title === title ? { ...item, numPages, numExtras } : item
+            item.title === title ? { ...item, numPages, numLanguages, extrasPrice } : item
           );
         } else {
           return prev;
         }
       } else {
-        return [...prev, { title, numPages, numExtras }];
+        return [...prev, { title, numPages, numLanguages, extrasPrice }];
       }
     });
   };
 
   useEffect(() => {
-    const extrasPrice = numExtras * 30;
-    setTotalPrice(webPrice + extrasPrice);
-  }, [webPrice, numExtras]);
+    setTotalExtrasPrice(cardOptions.reduce((accumulator, card) => accumulator + card.extrasPrice, 0));
+    setTotalPrice(webPrice + totalExtrasPrice);
+  }, [cardOptions, webPrice, totalExtrasPrice]);
 
   return (
     <PriceContext.Provider
       value={{
         totalPrice,
         webPrice,
-        numExtras,
+        totalExtrasPrice,
         cardOptions,
         updateWebPrice,
-        updateNumExtras,
         updateCardOptions,
       }}
     >

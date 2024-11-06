@@ -14,23 +14,18 @@ const Card = ({
   price: number;
 }) => {
   const [isChecked, setIsChecked] = useState(false);
-  const [localNumPages, setLocalNumPages] = useState(0);
-  const [localNumLanguages, setLocalNumLanguages] = useState(0);
-  const { cardOptions, updateWebPrice, updateNumExtras, updateCardOptions } =
-    usePriceContext();
-
-  useEffect(() => {
-    updateNumExtras(localNumPages + localNumLanguages);
-  }, [localNumPages, localNumLanguages]);
+  const [numPages, setNumPages] = useState(0);
+  const [numLanguages, setNumLanguages] = useState(0);
+  const { updateWebPrice, updateCardOptions } = usePriceContext();
 
   useEffect(() => {
     updateCardOptions({
       title: title,
-      numPages: localNumPages,
-      numExtras: localNumLanguages,
+      numPages: numPages,
+      numLanguages: numLanguages,
+      extrasPrice: (numPages + numLanguages) * 30
     });
-    console.log(cardOptions);
-  }, [localNumPages, localNumLanguages]);
+  }, [numPages, numLanguages]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
@@ -39,15 +34,21 @@ const Card = ({
       updateWebPrice(price);
     } else {
       updateWebPrice(-price);
+      updateCardOptions({
+        title: title,
+        numPages: 0,
+        numLanguages: 0,
+        extrasPrice: 0
+      });
     }
   };
 
-  const handleNumPagesChange = (inputValue: number) => {
-    setLocalNumPages(inputValue);
+  const handleNumPagesChange = (inputValue: string) => {
+    setNumPages(parseInt(inputValue));
   };
 
-  const handleNumLanguagesChange = (inputValue: number) => {
-    setLocalNumLanguages(inputValue);
+  const handleNumLanguagesChange = (inputValue: string) => {
+    setNumLanguages(parseInt(inputValue));
   };
 
   const checkedStyles = isChecked && "border-2 border-green h-60 justify-start";
@@ -81,8 +82,8 @@ const Card = ({
           <WebsiteCustomization
             updateNumPages={handleNumPagesChange}
             updateNumLanguages={handleNumLanguagesChange}
-            numPages={localNumPages}
-            numLanguages={localNumLanguages}
+            numPages={numPages}
+            numLanguages={numLanguages}
           />
         )}
       </div>

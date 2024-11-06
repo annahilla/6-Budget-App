@@ -7,8 +7,8 @@ const WebsiteCustomization = ({
   numPages, 
   numLanguages
 }: {
-  updateNumPages: (inputValue: number) => void, 
-  updateNumLanguages: (inputValue: number) => void, 
+  updateNumPages: (inputValue: string) => void, 
+  updateNumLanguages: (inputValue: string) => void, 
   numPages: number, 
   numLanguages: number
 }) => {

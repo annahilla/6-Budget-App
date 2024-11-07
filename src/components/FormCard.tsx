@@ -67,7 +67,7 @@ const FormCard = () => {
             onChangeInput={onChangePhone}
           />
           <Input
-            type="string"
+            type="email"
             placeholder="Email"
             value={email}
             name="email"

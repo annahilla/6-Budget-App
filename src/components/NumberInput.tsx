@@ -14,7 +14,7 @@ const NumberInput = ({
   };
 
   const decreaseInputValue = () => {
-    setInputValue((prev) => prev - 1);
+    setInputValue((prev) => (prev === 0 ? 0 : prev - 1));
   };
 
   const increaseInputValue = () => {
@@ -30,12 +30,12 @@ const NumberInput = ({
       <button
         onClick={decreaseInputValue}
         type="button"
-        className="rounded-full w-4 h-4 text-xs border border-slate-300 text-slate-500 flex items-center justify-center pb-0.5"
+        className="rounded-full w-4 h-4 text-xs border border-gray-400 text-gray-500 flex items-center justify-center pb-0.5"
       >
         -
       </button>
       <input
-        className="w-10 text-center border rounded border-slate-300 outline-none"
+        className="w-10 text-center border rounded border-gray-400 outline-none"
         type="number"
         onChange={handleChange}
         value={inputValue}
@@ -43,7 +43,7 @@ const NumberInput = ({
       <button
         onClick={increaseInputValue}
         type="button"
-        className="rounded-full w-4 h-4 text-xs border border-slate-300 text-slate-500 flex items-center justify-center pb-0.5"
+        className="rounded-full w-4 h-4 text-xs border border-gray-400 text-gray-500 flex items-center justify-center pb-0.5"
       >
         +
       </button>

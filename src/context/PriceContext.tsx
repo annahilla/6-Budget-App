@@ -6,11 +6,13 @@ interface PriceContextType {
   webPrice: number;
   totalExtrasPrice: number;
   cardOptions: CardOptions[];
+  userInfo: User[];
   updateWebPrice: (amount: number) => void;
   updateCardOptions: (props: CardOptions) => void;
   selectedCards: number[];
   addSelectedCard: (id: number) => void;
   removeSelectedCard: (id: number) => void;
+  updateUserInfo: (props: User) => void;
 }
 
 const PriceContext = createContext<PriceContextType>({
@@ -18,11 +20,13 @@ const PriceContext = createContext<PriceContextType>({
   webPrice: 0,
   totalExtrasPrice: 0,
   cardOptions: [],
+  userInfo: [],
   updateWebPrice: () => {},
   updateCardOptions: () => {},
   selectedCards: [],
   addSelectedCard: () => {},
   removeSelectedCard: () => {},
+  updateUserInfo: () => {},
 });
 
 export const usePriceContext = () => {
@@ -31,6 +35,13 @@ export const usePriceContext = () => {
 
 interface Props {
   children?: ReactNode;
+}
+
+interface User {
+  name: string;
+  phone: string;
+  email: string;
+  cardOptions: CardOptions[];
 }
 
 interface CardOptions {
@@ -44,6 +55,7 @@ interface CardOptions {
 
 export const PriceProvider = ({ children }: Props) => {
   const [cardOptions, setCardOptions] = useState<CardOptions[]>([]);
+  const [userInfo, setUserInfo] = useState<User[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [webPrice, setWebPrice] = useState(0);
   const [totalExtrasPrice, setTotalExtrasPrice] = useState(0);
@@ -82,6 +94,15 @@ export const PriceProvider = ({ children }: Props) => {
     });
   };
 
+  const updateUserInfo = (props: User) => {
+    const { name, phone, email, cardOptions } = props;
+    setUserInfo((prev) => [...prev, { name, phone, email, cardOptions }]);
+  };
+
+  useEffect(() => {
+    console.log(userInfo);
+  }, [userInfo]);
+
   useEffect(() => {
     setTotalExtrasPrice(
       cardOptions.reduce(
@@ -89,7 +110,6 @@ export const PriceProvider = ({ children }: Props) => {
         0
       )
     );
-    console.log(cardOptions);
     setTotalPrice(webPrice + totalExtrasPrice);
   }, [cardOptions, webPrice, totalExtrasPrice]);
 
@@ -113,10 +133,12 @@ export const PriceProvider = ({ children }: Props) => {
         totalExtrasPrice,
         cardOptions,
         selectedCards,
+        userInfo,
         updateWebPrice,
         updateCardOptions,
         addSelectedCard,
         removeSelectedCard,
+        updateUserInfo,
       }}
     >
       {children}

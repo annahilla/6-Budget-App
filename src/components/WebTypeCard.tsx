@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { usePriceContext } from "../context/PriceContext";
-import WebsiteCustomization from "./WebsiteCustomization";
+import ExtrasConfig from "./ExtrasConfig";
 import Card from "./Card";
 
 const WebTypeCard = ({
@@ -94,7 +94,7 @@ const WebTypeCard = ({
       </div>
       <div className="self-end">
         {isChecked && (
-          <WebsiteCustomization
+          <ExtrasConfig
             updateNumPages={handleNumPagesChange}
             updateNumLanguages={handleNumLanguagesChange}
           />

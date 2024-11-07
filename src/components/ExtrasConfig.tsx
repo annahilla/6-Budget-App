@@ -1,6 +1,6 @@
 import NumberInput from "./NumberInput";
 
-const WebsiteCustomization = ({
+const ExtrasConfig = ({
   updateNumPages,
   updateNumLanguages,
 }: {
@@ -21,4 +21,4 @@ const WebsiteCustomization = ({
   );
 };
 
-export default WebsiteCustomization;
+export default ExtrasConfig;

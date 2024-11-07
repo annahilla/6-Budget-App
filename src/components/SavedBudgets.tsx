@@ -6,20 +6,21 @@ const SavedBudgets = () => {
 
   return (
     <section className="m-auto my-20">
-      <h3 className="font-bold text-2xl m-auto my-6 lg:w-2/3">
+      <div className="m-auto border-t-2 border-dashed border-gray-300 my-10 2xl:w-2/3"></div>
+      <h3 className="font-bold pt-4 text-2xl m-auto my-6 text-center 2xl:w-2/3 lg:text-left">
         Pressupostos en curs:
       </h3>
       {
         userInfo.map(user => (
-          <Card styles="flex-row">
-        <div className="flex flex-col gap-8 justify-center items-center md:flex-row md:justify-between">
-          <div className="font-semibold grow text-center flex flex-col gap-1 md:w-20 md:text-left">
+          <Card styles="flex-row flex-wrap">
+        <div className="flex flex-col gap-8 justify-center items-center lg:flex-row lg:justify-between">
+          <div className="font-semibold text-center flex flex-col gap-1 lg:w-20 lg:text-left">
             <h6 className="font-bold text-3xl">{user.name}</h6>
-            <p className="text-md text-gray-500">{user.email}</p>
-            <p className="text-md text-gray-500">{user.phone}</p>
+            <p className="text-lg text-gray-500">{user.email}</p>
+            <p className="text-lg text-gray-500">{user.phone}</p>
           </div>
-          <div className="font-bold grow text-center text-md lg:text-left md:justify-self-start">
-            <p className="py-4 md:py-0">Serveis contractats:</p>
+          <div className="font-bold text-center text-lg lg:text-left lg:justify-self-start">
+            <p className="py-4 lg:py-0">Serveis contractats:</p>
             <ul className="px-5 lg:list-disc">
               {
                 user.cardOptions.map(option => (
@@ -28,7 +29,7 @@ const SavedBudgets = () => {
               }
             </ul>
           </div>
-          <div className="text-center flex grow flex-col items-center lg:text-left">
+          <div className="text-center flex flex-col items-center lg:text-left">
             <p className="font-bold text-xl text-gray-500">Total:</p>
             <p className="text-2xl">
               <span className="font-extrabold text-5xl">{user.totalPrice}</span> €

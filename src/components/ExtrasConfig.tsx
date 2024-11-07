@@ -11,15 +11,36 @@ const ExtrasConfig = ({
   updateNumLanguages: (inputValue: number) => void;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
 
-  const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  const openLangModal = () => {
+    setIsModalOpen(true);
+    setTitle("Número de llenguatges");
+    setText(
+      "Afegeix els llenguatges que tindrà el teu projecte. El cost de cada llenguatge és de 30€."
+    );
+  };
+
+  const openPageModal = () => {
+    setIsModalOpen(true);
+    setTitle("Número de pàgines");
+    setText(
+      "Afegeix les pàgines que necessitis per a dur a terme el teu projecte. El cost de cada pàgina és de 30€."
+    );
+  };
 
   return (
     <form className="flex flex-col items-end gap-4">
       <div className="flex gap-4">
         <label className="flex items-center justify-center gap-1.5">
-          <button type="button" onClick={openModal} className="text-gray-500">
+          <button
+            type="button"
+            onClick={openPageModal}
+            className="text-gray-500"
+          >
             <MdInfoOutline />
           </button>
           <span>Nombre de pàgines</span>
@@ -28,14 +49,23 @@ const ExtrasConfig = ({
       </div>
       <div className="flex gap-5">
         <label className="flex items-center justify-center gap-1.5">
-          <button type="button" onClick={openModal} className="text-gray-500">
+          <button
+            type="button"
+            onClick={openLangModal}
+            className="text-gray-500"
+          >
             <MdInfoOutline />
           </button>
           <span>Nombre de llenguatges</span>
         </label>
         <NumberInput updateExtras={updateNumLanguages} />
       </div>
-      <InfoModal isOpen={isModalOpen} />
+      <InfoModal
+        isOpen={isModalOpen}
+        closeModal={closeModal}
+        title={title}
+        text={text}
+      />
     </form>
   );
 };

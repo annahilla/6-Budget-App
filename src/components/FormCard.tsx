@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Card from "./Card";
 import Input from "./Input";
 import { FaArrowRight } from "react-icons/fa";
@@ -10,7 +10,7 @@ const FormCard = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [showBudget, setShowBudget] = useState(false);
-  const { cardOptions, updateUserInfo, totalPrice, userInfo } = usePriceContext();
+  const { cardOptions, updateUserInfo, totalPrice } = usePriceContext();
 
   const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -32,8 +32,8 @@ const FormCard = () => {
       phone,
       email,
       cardOptions,
-      totalPrice
-    }
+      totalPrice,
+    };
     updateUserInfo(formData);
     setShowBudget(true);
 
@@ -41,7 +41,6 @@ const FormCard = () => {
     setPhone("");
     setEmail("");
   };
-
 
   return (
     <>
@@ -53,14 +52,22 @@ const FormCard = () => {
           onSubmit={submitForm}
           className="flex flex-col items-center justify-between gap-3 lg:flex-row"
         >
-          <Input type="string" placeholder="Name" value={name} onChangeInput={onChangeName} name="name" />
-          <Input type="number"
+          <Input
+            type="string"
+            placeholder="Name"
+            value={name}
+            onChangeInput={onChangeName}
+            name="name"
+          />
+          <Input
+            type="number"
             placeholder="Telèfon"
             value={phone}
             name="phone"
             onChangeInput={onChangePhone}
           />
-          <Input type="string"
+          <Input
+            type="string"
             placeholder="Email"
             value={email}
             name="email"
@@ -75,7 +82,7 @@ const FormCard = () => {
           </button>
         </form>
       </Card>
-      {showBudget && <SavedBudgets/>}
+      {showBudget && <SavedBudgets />}
     </>
   );
 };

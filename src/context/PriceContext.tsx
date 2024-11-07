@@ -37,14 +37,15 @@ interface Props {
   children?: ReactNode;
 }
 
-interface User {
+export interface User {
   name: string;
   phone: string;
   email: string;
   cardOptions: CardOptions[];
+  totalPrice: number;
 }
 
-interface CardOptions {
+export interface CardOptions {
   id: number;
   title: string;
   numPages: number;
@@ -96,12 +97,8 @@ export const PriceProvider = ({ children }: Props) => {
 
   const updateUserInfo = (props: User) => {
     const { name, phone, email, cardOptions } = props;
-    setUserInfo((prev) => [...prev, { name, phone, email, cardOptions }]);
+    setUserInfo((prev) => [...prev, { name, phone, email, cardOptions, totalPrice }]);
   };
-
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
 
   useEffect(() => {
     setTotalExtrasPrice(

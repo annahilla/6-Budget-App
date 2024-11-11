@@ -2,15 +2,53 @@ import Card from "./Card";
 import { usePriceContext } from "../context/PriceContext";
 import { BiDownArrow } from "react-icons/bi";
 import { BiUpArrow } from "react-icons/bi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const SavedBudgets = () => {
   const { userInfo } = usePriceContext();
   const [sortedUsers, setSortedUsers] = useState(userInfo);
-  const [isAscending, setIsAscending] = useState(false);
+  const [isAscendingByName, setIsAscendingByName] = useState(false);
+  const [isAscendingByDate, setIsAscendingByDate] = useState(false);
+
+  useEffect(() => {
+    setSortedUsers(userInfo);
+  }, [userInfo])
+
+  const sortByDate = () => {
+    if(isAscendingByDate) {
+      setSortedUsers(sortedUsers.sort((a, b) => {
+        const dateA = a.date;
+        const dateB = b.date;
+        if(dateA < dateB) {
+          return -1;
+        }
+        if(dateB > dateA) {
+          return 1;
+        }
+        return 0;
+      }))
+    } else {
+      setSortedUsers(sortedUsers.sort((a, b) => {
+        const dateA = a.date;
+        const dateB = b.date;
+        if(dateA < dateB) {
+          return 1;
+        }
+        if(dateB > dateA) {
+          return -1;
+        }
+        return 0;
+      }))
+    }
+    setIsAscendingByDate(prev => !prev)
+  }
+
+  const resetOrder = () => {
+    setSortedUsers(userInfo);
+  }
 
   const sortByName = () => {
-    if(isAscending) {
+    if(isAscendingByName) {
       setSortedUsers(sortedUsers.sort((a, b) => {
         const nameA = a.name.toUpperCase(); 
         const nameB = b.name.toUpperCase(); 
@@ -35,7 +73,7 @@ const SavedBudgets = () => {
         return 0;
       }))
     }
-    setIsAscending(prev => !prev);
+    setIsAscendingByName(prev => !prev);
   }
 
   return (
@@ -46,10 +84,15 @@ const SavedBudgets = () => {
       </h3>
       <ul className="flex font-bold text-lg text-gray-600 m-auto items-center justify-end gap-10 2xl:w-2/3">
         <li className="cursor-pointer hover:text-black active:text-black">
-          <button>Data</button>
+          <button onClick={sortByDate} className="flex items-center justify-center gap-1 cursor-pointer">
+            Data
+            <span className="pt-1">
+              {isAscendingByDate ? <BiUpArrow size={14} /> : <BiDownArrow size={14} />}
+            </span>
+          </button>
         </li>
         <li className="hover:text-black active:text-black">
-          <button className="flex items-center justify-center gap-1 cursor-pointer">
+          <button onClick={resetOrder} className="flex items-center justify-center gap-1 cursor-pointer">
           Import
           <span className="pt-1">
             <BiDownArrow size={14} />
@@ -61,13 +104,13 @@ const SavedBudgets = () => {
           <button onClick={sortByName} className="flex items-center justify-center gap-1 cursor-pointer">
             Nom
             <span className="pt-1">
-              {isAscending ? <BiUpArrow size={14} /> : <BiDownArrow size={14} />}
+              {isAscendingByName ? <BiUpArrow size={14} /> : <BiDownArrow size={14} />}
             </span>
           </button>
         </li>
       </ul>
       {sortedUsers.map((user) => (
-        <Card styles="flex-row flex-wrap">
+        <Card key={user.id} styles="flex-row flex-wrap">
           <div className="flex flex-col gap-8 justify-center items-center lg:flex-row lg:justify-between">
             <div className="font-semibold text-center flex flex-col gap-1 lg:w-1/3 lg:text-left">
               <h6 className="font-bold text-3xl">{user.name}</h6>

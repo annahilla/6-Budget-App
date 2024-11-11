@@ -10,7 +10,7 @@ const FormCard = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [showBudget, setShowBudget] = useState(false);
-  const { cardOptions, updateUserInfo, totalPrice } = usePriceContext();
+  const { cardOptions, updateUserInfo, totalPrice, userInfo } = usePriceContext();
 
   const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -27,12 +27,17 @@ const FormCard = () => {
   const submitForm = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const id = crypto.randomUUID();
+    const date = new Date();
+
     const formData: User = {
+      id,
       name,
       phone,
       email,
       cardOptions,
       totalPrice,
+      date
     };
     updateUserInfo(formData);
     setShowBudget(true);
@@ -40,6 +45,9 @@ const FormCard = () => {
     setName("");
     setPhone("");
     setEmail("");
+
+    console.log(userInfo)
+
   };
 
   return (

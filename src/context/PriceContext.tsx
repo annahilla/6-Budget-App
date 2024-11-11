@@ -38,11 +38,13 @@ interface Props {
 }
 
 export interface User {
+  id: string;
   name: string;
   phone: string;
   email: string;
   cardOptions: CardOptions[];
   totalPrice: number;
+  date: Date;
 }
 
 export interface CardOptions {
@@ -96,8 +98,8 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   const updateUserInfo = (props: User) => {
-    const { name, phone, email, cardOptions } = props;
-    setUserInfo((prev) => [...prev, { name, phone, email, cardOptions, totalPrice }]);
+    const { id, name, phone, email, cardOptions, date } = props;
+    setUserInfo((prev) => [...prev, { id, name, phone, email, cardOptions, totalPrice, date }]);
   };
 
   useEffect(() => {

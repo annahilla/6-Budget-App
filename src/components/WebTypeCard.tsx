@@ -8,11 +8,13 @@ const WebTypeCard = ({
   title,
   description,
   price,
+  discount,
 }: {
   id: number;
   title: string;
   description: string;
   price: number;
+  discount: number;
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [numPages, setNumPages] = useState(0);
@@ -22,6 +24,7 @@ const WebTypeCard = ({
     updateCardOptions,
     addSelectedCard,
     removeSelectedCard,
+    isDiscounted,
   } = usePriceContext();
 
   useEffect(() => {
@@ -50,10 +53,10 @@ const WebTypeCard = ({
     const checked = event.target.checked;
     setIsChecked(checked);
     if (checked) {
-      updateWebPrice(price);
+      updateWebPrice(price, discount);
       addSelectedCard(id);
     } else {
-      updateWebPrice(-price);
+      updateWebPrice(-price, discount);
       removeSelectedCard(id);
     }
   };
@@ -67,17 +70,22 @@ const WebTypeCard = ({
   };
 
   const checkedStyles =
-    isChecked && "border-2 border-green h-100 justify-start md:h-60";
+    isChecked && "border-2 border-green justify-start md:h-fit";
 
   return (
     <Card styles={checkedStyles}>
-      <div className="flex flex-col justify-start items-center gap-10 w-100 md:flex-row md:justify-between md:text-left">
+      <div className="flex flex-col justify-start gap-10 items-center w-100 md:flex-row md:justify-between md:text-left">
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-2xl">{title}</h3>
-          <p>{description}</p>
+          <p className="md:w-72">{description}</p>
         </div>
-        <div className="font-bold text-3xl">
-          <span className="font-extrabold text-4xl">{price}</span>€
+        <div className="font-bold text-3xl flex flex-col items-center justify-center gap-2">
+          {isDiscounted && (
+            <p className="text-xl text-yellow-500">Estalvia un 20%</p>
+          )}
+          <span className="font-extrabold text-4xl">
+            {isDiscounted ? price * (1 - discount) : price}€
+          </span>
         </div>
         <div>
           <div className="flex items-center gap-2">

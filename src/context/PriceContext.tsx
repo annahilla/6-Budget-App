@@ -7,12 +7,14 @@ interface PriceContextType {
   totalExtrasPrice: number;
   cardOptions: CardOptions[];
   userInfo: User[];
-  updateWebPrice: (amount: number) => void;
-  updateCardOptions: (props: CardOptions) => void;
   selectedCards: number[];
+  isDiscounted: boolean;
+  updateWebPrice: (amount: number, discount: number) => void;
+  updateCardOptions: (props: CardOptions) => void;
   addSelectedCard: (id: number) => void;
   removeSelectedCard: (id: number) => void;
   updateUserInfo: (props: User) => void;
+  updateIsDiscounted: () => void;
 }
 
 const PriceContext = createContext<PriceContextType>({
@@ -21,12 +23,14 @@ const PriceContext = createContext<PriceContextType>({
   totalExtrasPrice: 0,
   cardOptions: [],
   userInfo: [],
+  selectedCards: [],
+  isDiscounted: false,
   updateWebPrice: () => {},
   updateCardOptions: () => {},
-  selectedCards: [],
   addSelectedCard: () => {},
   removeSelectedCard: () => {},
   updateUserInfo: () => {},
+  updateIsDiscounted: () => {},
 });
 
 export const usePriceContext = () => {
@@ -63,9 +67,18 @@ export const PriceProvider = ({ children }: Props) => {
   const [webPrice, setWebPrice] = useState(0);
   const [totalExtrasPrice, setTotalExtrasPrice] = useState(0);
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
+  const [isDiscounted, setIsDiscounted] = useState(false);
 
-  const updateWebPrice = (amount: number) => {
-    setWebPrice((prevPrice) => prevPrice + amount);
+  const updateIsDiscounted = () => {
+    setIsDiscounted((prev) => !prev);
+  };
+
+  const updateWebPrice = (amount: number, discount: number) => {
+    if (isDiscounted) {
+      setWebPrice((prevPrice) => prevPrice + amount * (1 - discount));
+    } else {
+      setWebPrice((prevPrice) => prevPrice + amount);
+    }
   };
 
   const updateCardOptions = (props: CardOptions) => {
@@ -99,7 +112,10 @@ export const PriceProvider = ({ children }: Props) => {
 
   const updateUserInfo = (props: User) => {
     const { id, name, phone, email, cardOptions, date } = props;
-    setUserInfo((prev) => [...prev, { id, name, phone, email, cardOptions, totalPrice, date }]);
+    setUserInfo((prev) => [
+      ...prev,
+      { id, name, phone, email, cardOptions, totalPrice, date },
+    ]);
   };
 
   useEffect(() => {
@@ -133,11 +149,13 @@ export const PriceProvider = ({ children }: Props) => {
         cardOptions,
         selectedCards,
         userInfo,
+        isDiscounted,
         updateWebPrice,
         updateCardOptions,
         addSelectedCard,
         removeSelectedCard,
         updateUserInfo,
+        updateIsDiscounted,
       }}
     >
       {children}

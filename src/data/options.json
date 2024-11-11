@@ -3,18 +3,21 @@
         "id": 1,
         "title": "Seo",
         "description": "Programació d'una web responsive completa",
-        "price": 300
+        "price": 300,
+        "discount": 0.2
     },
     {
         "id": 2,
         "title": "Ads",
         "description": "Programació d'una web responsive completa",
-        "price": 400
+        "price": 400,
+        "discount": 0.2
     },
     {
         "id": 3,
         "title": "Web",
         "description": "Programació d'una web responsive completa",
-        "price": 500
+        "price": 500,
+        "discount": 0.2
     }
 ]

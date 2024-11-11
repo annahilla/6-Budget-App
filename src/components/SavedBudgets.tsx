@@ -12,69 +12,37 @@ const SavedBudgets = () => {
 
   useEffect(() => {
     setSortedUsers(userInfo);
-  }, [userInfo])
+  }, [userInfo]);
 
   const sortByDate = () => {
-    if(isAscendingByDate) {
-      setSortedUsers(sortedUsers.sort((a, b) => {
-        const dateA = a.date;
-        const dateB = b.date;
-        if(dateA < dateB) {
-          return -1;
-        }
-        if(dateB > dateA) {
-          return 1;
-        }
-        return 0;
-      }))
-    } else {
-      setSortedUsers(sortedUsers.sort((a, b) => {
-        const dateA = a.date;
-        const dateB = b.date;
-        if(dateA < dateB) {
-          return 1;
-        }
-        if(dateB > dateA) {
-          return -1;
-        }
-        return 0;
-      }))
-    }
-    setIsAscendingByDate(prev => !prev)
-  }
+    const sortedUsers = [...userInfo].sort((a, b) => {
+      const dateA = new Date(a.date).getTime();
+      const dateB = new Date(b.date).getTime();
+
+      return isAscendingByDate ? dateA - dateB : dateB - dateA; // canvia l'ordenació
+    });
+    setSortedUsers(sortedUsers);
+    setIsAscendingByDate((prev) => !prev);
+  };
 
   const resetOrder = () => {
     setSortedUsers(userInfo);
-  }
+  };
 
   const sortByName = () => {
-    if(isAscendingByName) {
-      setSortedUsers(sortedUsers.sort((a, b) => {
-        const nameA = a.name.toUpperCase(); 
-        const nameB = b.name.toUpperCase(); 
-        if (nameA < nameB) {
-          return -1;
-        }
-        if (nameA > nameB) {
-          return 1;
-        }
-        return 0;
-      }))
+    if (isAscendingByName) {
+      const sortedUsers = [...userInfo].sort((a, b) =>
+        a.name.localeCompare(b.name)
+      );
+      setSortedUsers(sortedUsers);
     } else {
-      setSortedUsers(sortedUsers.sort((a, b) => {
-        const nameA = a.name.toUpperCase(); 
-        const nameB = b.name.toUpperCase(); 
-        if (nameA < nameB) {
-          return 1;
-        }
-        if (nameA > nameB) {
-          return -1;
-        }
-        return 0;
-      }))
+      const sortedUsers = [...userInfo].sort((a, b) =>
+        b.name.localeCompare(a.name)
+      );
+      setSortedUsers(sortedUsers);
     }
-    setIsAscendingByName(prev => !prev);
-  }
+    setIsAscendingByName((prev) => !prev);
+  };
 
   return (
     <section className="m-auto my-20">
@@ -84,27 +52,43 @@ const SavedBudgets = () => {
       </h3>
       <ul className="flex font-bold text-lg text-gray-600 m-auto items-center justify-end gap-10 2xl:w-2/3">
         <li className="cursor-pointer hover:text-black active:text-black">
-          <button onClick={sortByDate} className="flex items-center justify-center gap-1 cursor-pointer">
+          <button
+            onClick={sortByDate}
+            className="flex items-center justify-center gap-1 cursor-pointer"
+          >
             Data
             <span className="pt-1">
-              {isAscendingByDate ? <BiUpArrow size={14} /> : <BiDownArrow size={14} />}
+              {isAscendingByDate ? (
+                <BiUpArrow size={14} />
+              ) : (
+                <BiDownArrow size={14} />
+              )}
             </span>
           </button>
         </li>
         <li className="hover:text-black active:text-black">
-          <button onClick={resetOrder} className="flex items-center justify-center gap-1 cursor-pointer">
-          Import
-          <span className="pt-1">
-            <BiDownArrow size={14} />
-          </span>
+          <button
+            onClick={resetOrder}
+            className="flex items-center justify-center gap-1 cursor-pointer"
+          >
+            Import
+            <span className="pt-1">
+              <BiDownArrow size={14} />
+            </span>
           </button>
-          
         </li>
         <li className="cursor-pointer hover:text-black active:text-black">
-          <button onClick={sortByName} className="flex items-center justify-center gap-1 cursor-pointer">
+          <button
+            onClick={sortByName}
+            className="flex items-center justify-center gap-1 cursor-pointer"
+          >
             Nom
             <span className="pt-1">
-              {isAscendingByName ? <BiUpArrow size={14} /> : <BiDownArrow size={14} />}
+              {isAscendingByName ? (
+                <BiUpArrow size={14} />
+              ) : (
+                <BiDownArrow size={14} />
+              )}
             </span>
           </button>
         </li>

@@ -10,7 +10,7 @@ const FormCard = () => {
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [showBudget, setShowBudget] = useState(false);
-  const { cardOptions, updateUserInfo, totalPrice, userInfo } = usePriceContext();
+  const { cardOptions, updateUserInfo, totalPrice } = usePriceContext();
 
   const onChangeName = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
@@ -37,7 +37,7 @@ const FormCard = () => {
       email,
       cardOptions,
       totalPrice,
-      date
+      date,
     };
     updateUserInfo(formData);
     setShowBudget(true);
@@ -45,9 +45,6 @@ const FormCard = () => {
     setName("");
     setPhone("");
     setEmail("");
-
-    console.log(userInfo)
-
   };
 
   return (

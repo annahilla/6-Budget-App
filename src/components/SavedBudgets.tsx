@@ -2,7 +2,8 @@ import Card from "./Card";
 import { usePriceContext } from "../context/PriceContext";
 import { BiDownArrow } from "react-icons/bi";
 import { BiUpArrow } from "react-icons/bi";
-import { useEffect, useState } from "react";
+import { IoSearch } from "react-icons/io5";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const SavedBudgets = () => {
   const { userInfo } = usePriceContext();
@@ -13,6 +14,18 @@ const SavedBudgets = () => {
   useEffect(() => {
     setSortedUsers(userInfo);
   }, [userInfo]);
+
+  const searchItem = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    const result = userInfo.filter(
+      (user) =>
+        user.name.toLowerCase().includes(value) ||
+        user.email.toLowerCase().includes(value) ||
+        user.phone.includes(value)
+    );
+
+    setSortedUsers(result);
+  };
 
   const sortByDate = () => {
     const sortedUsers = [...userInfo].sort((a, b) => {
@@ -50,49 +63,61 @@ const SavedBudgets = () => {
       <h3 className="font-bold pt-4 text-2xl m-auto my-6 text-center 2xl:w-2/3 lg:text-left">
         Pressupostos en curs:
       </h3>
-      <ul className="flex font-bold text-lg text-gray-600 m-auto items-center justify-end gap-10 2xl:w-2/3">
-        <li className="cursor-pointer hover:text-black active:text-black">
-          <button
-            onClick={sortByDate}
-            className="flex items-center justify-center gap-1 cursor-pointer"
-          >
-            Data
-            <span className="pt-1">
-              {isAscendingByDate ? (
-                <BiUpArrow size={14} />
-              ) : (
+      <div className="flex flex-col font-bold text-lg text-gray-600 m-auto items-center justify-end gap-10 pb-5 2xl:w-2/3 lg:flex-row">
+        <div className="justify-self-end align-self-end relative">
+          <input
+            onChange={searchItem}
+            className="border rounded-lg px-4 py-2 outline-none"
+            type="text"
+          />
+          <span className="absolute top-3 right-4 text-gray-500">
+            <IoSearch size={22} />
+          </span>
+        </div>
+        <ul className="flex itemx-center justify-between gap-10 lg:gap-5">
+          <li className="cursor-pointer hover:text-black active:text-black">
+            <button
+              onClick={sortByDate}
+              className="flex items-center justify-center gap-1 cursor-pointer"
+            >
+              Data
+              <span className="pt-1">
+                {isAscendingByDate ? (
+                  <BiUpArrow size={14} />
+                ) : (
+                  <BiDownArrow size={14} />
+                )}
+              </span>
+            </button>
+          </li>
+          <li className="hover:text-black active:text-black">
+            <button
+              onClick={resetOrder}
+              className="flex items-center justify-center gap-1 cursor-pointer"
+            >
+              Import
+              <span className="pt-1">
                 <BiDownArrow size={14} />
-              )}
-            </span>
-          </button>
-        </li>
-        <li className="hover:text-black active:text-black">
-          <button
-            onClick={resetOrder}
-            className="flex items-center justify-center gap-1 cursor-pointer"
-          >
-            Import
-            <span className="pt-1">
-              <BiDownArrow size={14} />
-            </span>
-          </button>
-        </li>
-        <li className="cursor-pointer hover:text-black active:text-black">
-          <button
-            onClick={sortByName}
-            className="flex items-center justify-center gap-1 cursor-pointer"
-          >
-            Nom
-            <span className="pt-1">
-              {isAscendingByName ? (
-                <BiUpArrow size={14} />
-              ) : (
-                <BiDownArrow size={14} />
-              )}
-            </span>
-          </button>
-        </li>
-      </ul>
+              </span>
+            </button>
+          </li>
+          <li className="cursor-pointer hover:text-black active:text-black">
+            <button
+              onClick={sortByName}
+              className="flex items-center justify-center gap-1 cursor-pointer"
+            >
+              Nom
+              <span className="pt-1">
+                {isAscendingByName ? (
+                  <BiUpArrow size={14} />
+                ) : (
+                  <BiDownArrow size={14} />
+                )}
+              </span>
+            </button>
+          </li>
+        </ul>
+      </div>
       {sortedUsers.map((user) => (
         <Card key={user.id} styles="flex-row flex-wrap">
           <div className="flex flex-col gap-8 justify-center items-center lg:flex-row lg:justify-between">

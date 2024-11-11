@@ -1,8 +1,42 @@
 import Card from "./Card";
 import { usePriceContext } from "../context/PriceContext";
+import { BiDownArrow } from "react-icons/bi";
+import { BiUpArrow } from "react-icons/bi";
+import { useState } from "react";
 
 const SavedBudgets = () => {
   const { userInfo } = usePriceContext();
+  const [sortedUsers, setSortedUsers] = useState(userInfo);
+  const [isAscending, setIsAscending] = useState(false);
+
+  const sortByName = () => {
+    if(isAscending) {
+      setSortedUsers(sortedUsers.sort((a, b) => {
+        const nameA = a.name.toUpperCase(); 
+        const nameB = b.name.toUpperCase(); 
+        if (nameA < nameB) {
+          return -1;
+        }
+        if (nameA > nameB) {
+          return 1;
+        }
+        return 0;
+      }))
+    } else {
+      setSortedUsers(sortedUsers.sort((a, b) => {
+        const nameA = a.name.toUpperCase(); 
+        const nameB = b.name.toUpperCase(); 
+        if (nameA < nameB) {
+          return 1;
+        }
+        if (nameA > nameB) {
+          return -1;
+        }
+        return 0;
+      }))
+    }
+    setIsAscending(prev => !prev);
+  }
 
   return (
     <section className="m-auto my-20">
@@ -10,7 +44,29 @@ const SavedBudgets = () => {
       <h3 className="font-bold pt-4 text-2xl m-auto my-6 text-center 2xl:w-2/3 lg:text-left">
         Pressupostos en curs:
       </h3>
-      {userInfo.map((user) => (
+      <ul className="flex font-bold text-lg text-gray-600 m-auto items-center justify-end gap-10 2xl:w-2/3">
+        <li className="cursor-pointer hover:text-black active:text-black">
+          <button>Data</button>
+        </li>
+        <li className="hover:text-black active:text-black">
+          <button className="flex items-center justify-center gap-1 cursor-pointer">
+          Import
+          <span className="pt-1">
+            <BiDownArrow size={14} />
+          </span>
+          </button>
+          
+        </li>
+        <li className="cursor-pointer hover:text-black active:text-black">
+          <button onClick={sortByName} className="flex items-center justify-center gap-1 cursor-pointer">
+            Nom
+            <span className="pt-1">
+              {isAscending ? <BiUpArrow size={14} /> : <BiDownArrow size={14} />}
+            </span>
+          </button>
+        </li>
+      </ul>
+      {sortedUsers.map((user) => (
         <Card styles="flex-row flex-wrap">
           <div className="flex flex-col gap-8 justify-center items-center lg:flex-row lg:justify-between">
             <div className="font-semibold text-center flex flex-col gap-1 lg:w-1/3 lg:text-left">

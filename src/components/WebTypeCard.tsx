@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { usePriceContext } from "../context/PriceContext";
 import ExtrasConfig from "./ExtrasConfig";
 import Card from "./Card";
+import { useSearchParams } from "react-router-dom";
 
 const WebTypeCard = ({
   id,
@@ -29,6 +30,34 @@ const WebTypeCard = ({
     isDiscounted,
   } = usePriceContext();
 
+  const [searchParams, setSearchParams] = useSearchParams({});
+
+  const updateSearchParams = (param: string, value: string) => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
+      newParams.set(param, value);
+      return newParams;
+    });
+  };
+
+  const removeSearchParam = (param: string) => {
+    setSearchParams((prev) => {
+      const newParams = new URLSearchParams(prev);
+      newParams.delete(param);
+      return newParams;
+    });
+  };
+
+  useEffect(() => {
+    const pagesFromUrl = searchParams.get("pages");
+    const langFromUrl = searchParams.get("lang");
+    const isCheckedFromUrl = searchParams.get(title) === "true";
+
+    setNumPages(pagesFromUrl ? parseInt(pagesFromUrl) : 0);
+    setNumLanguages(langFromUrl ? parseInt(langFromUrl) : 0);
+    setIsChecked(isCheckedFromUrl);
+  }, [searchParams, title]);
+
   useEffect(() => {
     if (isDiscounted) {
       setCurrentPrice(price * (1 - discount));
@@ -38,31 +67,17 @@ const WebTypeCard = ({
   }, [isDiscounted, cardOptions]);
 
   useEffect(() => {
-    if (isChecked) {
-      updateCardOptions({
-        id: id,
-        title: title,
-        numPages: numPages,
-        numLanguages: numLanguages,
-        extrasPrice: (numPages + numLanguages) * 30,
-        webPrice: currentPrice,
-        totalPrice: currentPrice + (numPages + numLanguages) * 30,
-        discount: discount,
-        remove: false,
-      });
-    } else {
-      updateCardOptions({
-        id: id,
-        title: title,
-        numPages: 0,
-        numLanguages: 0,
-        extrasPrice: 0,
-        webPrice: 0,
-        totalPrice: 0,
-        discount: discount,
-        remove: true,
-      });
-    }
+    updateCardOptions({
+      id: id,
+      title: title,
+      numPages: isChecked ? numPages : 0,
+      numLanguages: isChecked ? numLanguages : 0,
+      extrasPrice: isChecked ? (numPages + numLanguages) * 30 : 0,
+      webPrice: isChecked ? currentPrice : 0,
+      totalPrice: isChecked ? currentPrice + (numPages + numLanguages) * 30 : 0,
+      discount: discount,
+      remove: !isChecked,
+    });
   }, [numPages, numLanguages, isDiscounted, isChecked, currentPrice]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -70,9 +85,11 @@ const WebTypeCard = ({
     setIsChecked(checked);
 
     if (checked) {
+      updateSearchParams(title, "true");
       updateWebPrice(price, discount);
       addSelectedCard(id);
     } else {
+      removeSearchParam(title);
       updateWebPrice(-price, discount);
       removeSelectedCard(id);
     }

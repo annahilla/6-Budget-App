@@ -35,7 +35,11 @@ const WebTypeCard = ({
   const updateSearchParams = (param: string, value: string) => {
     setSearchParams((prev) => {
       const newParams = new URLSearchParams(prev);
-      newParams.set(param, value);
+      if (value !== "0") {
+        newParams.set(param, value);
+      } else {
+        newParams.delete(param);
+      }
       return newParams;
     });
   };
@@ -49,22 +53,42 @@ const WebTypeCard = ({
   };
 
   useEffect(() => {
-    const pagesFromUrl = searchParams.get("pages");
-    const langFromUrl = searchParams.get("lang");
-    const isCheckedFromUrl = searchParams.get(title) === "true";
-
-    setNumPages(pagesFromUrl ? parseInt(pagesFromUrl) : 0);
-    setNumLanguages(langFromUrl ? parseInt(langFromUrl) : 0);
-    setIsChecked(isCheckedFromUrl);
-  }, [searchParams, title]);
-
-  useEffect(() => {
     if (isDiscounted) {
       setCurrentPrice(price * (1 - discount));
     } else {
       setCurrentPrice(price);
     }
   }, [isDiscounted, cardOptions]);
+
+  useEffect(() => {
+    const isCheckedFromUrl = searchParams.get(title) === "true";
+    const pagesFromUrl = Number(searchParams.get(`${title}_pages`));
+    const languagesFromUrl = Number(searchParams.get(`${title}_lang`));
+
+    console.log("isCheckedFromUrl:", isCheckedFromUrl);
+    console.log("pagesFromUrl:", pagesFromUrl);
+    console.log("languagesFromUrl:", languagesFromUrl);
+
+    setIsChecked(isCheckedFromUrl);
+    setNumPages(pagesFromUrl);
+    setNumLanguages(languagesFromUrl);
+
+    console.log(pagesFromUrl, languagesFromUrl);
+
+    if (isCheckedFromUrl) {
+      updateCardOptions({
+        id: id,
+        title: title,
+        numPages: pagesFromUrl,
+        numLanguages: languagesFromUrl,
+        extrasPrice: (pagesFromUrl + languagesFromUrl) * 30,
+        webPrice: currentPrice,
+        totalPrice: currentPrice + (pagesFromUrl + languagesFromUrl) * 30,
+        discount: discount,
+        remove: false,
+      });
+    }
+  }, [searchParams, title, id, currentPrice, discount, updateCardOptions]);
 
   useEffect(() => {
     updateCardOptions({
@@ -86,10 +110,16 @@ const WebTypeCard = ({
 
     if (checked) {
       updateSearchParams(title, "true");
+      if (numPages > 0)
+        updateSearchParams(`${title}_pages`, numPages.toString());
+      if (numLanguages > 0)
+        updateSearchParams(`${title}_lang`, numLanguages.toString());
       updateWebPrice(price, discount);
       addSelectedCard(id);
     } else {
       removeSearchParam(title);
+      removeSearchParam(`${title}_pages`);
+      removeSearchParam(`${title}_lang`);
       updateWebPrice(-price, discount);
       removeSelectedCard(id);
     }
@@ -97,10 +127,16 @@ const WebTypeCard = ({
 
   const handleNumPagesChange = (inputValue: number) => {
     setNumPages(inputValue);
+    if (isChecked) {
+      updateSearchParams(`${title}_pages`, inputValue.toString());
+    }
   };
 
   const handleNumLanguagesChange = (inputValue: number) => {
     setNumLanguages(inputValue);
+    if (isChecked) {
+      updateSearchParams(`${title}_lang`, inputValue.toString());
+    }
   };
 
   const checkedStyles =
@@ -138,6 +174,8 @@ const WebTypeCard = ({
           <ExtrasConfig
             updateNumPages={handleNumPagesChange}
             updateNumLanguages={handleNumLanguagesChange}
+            initialPages={numPages}
+            initialLanguages={numLanguages}
           />
         )}
       </div>

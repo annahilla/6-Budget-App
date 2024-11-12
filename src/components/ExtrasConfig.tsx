@@ -6,9 +6,13 @@ import InfoModal from "./InfoModal";
 const ExtrasConfig = ({
   updateNumPages,
   updateNumLanguages,
+  initialPages,
+  initialLanguages,
 }: {
   updateNumPages: (inputValue: number) => void;
   updateNumLanguages: (inputValue: number) => void;
+  initialPages: number;
+  initialLanguages: number;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState("");
@@ -45,7 +49,10 @@ const ExtrasConfig = ({
           </button>
           <span>Nombre de pàgines</span>
         </label>
-        <NumberInput name="pages" updateExtras={updateNumPages} />
+        <NumberInput
+          initialValue={initialPages}
+          updateExtras={updateNumPages}
+        />
       </div>
       <div className="flex gap-5">
         <label className="flex items-center justify-center gap-1.5">
@@ -58,7 +65,10 @@ const ExtrasConfig = ({
           </button>
           <span>Nombre de llenguatges</span>
         </label>
-        <NumberInput name="lang" updateExtras={updateNumLanguages} />
+        <NumberInput
+          initialValue={initialLanguages}
+          updateExtras={updateNumLanguages}
+        />
       </div>
       <InfoModal
         isOpen={isModalOpen}

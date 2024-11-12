@@ -4,7 +4,6 @@ import { createContext } from "react";
 interface PriceContextType {
   totalPrice: number;
   webPrice: number;
-  totalExtrasPrice: number;
   cardOptions: CardOptions[];
   userInfo: User[];
   selectedCards: number[];
@@ -20,7 +19,6 @@ interface PriceContextType {
 const PriceContext = createContext<PriceContextType>({
   totalPrice: 0,
   webPrice: 0,
-  totalExtrasPrice: 0,
   cardOptions: [],
   userInfo: [],
   selectedCards: [],
@@ -58,6 +56,7 @@ export interface CardOptions {
   numLanguages: number;
   extrasPrice: number;
   webPrice: number;
+  totalPrice: number;
   discount: number;
   remove: boolean;
 }
@@ -67,7 +66,6 @@ export const PriceProvider = ({ children }: Props) => {
   const [userInfo, setUserInfo] = useState<User[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [webPrice, setWebPrice] = useState(0);
-  const [totalExtrasPrice, setTotalExtrasPrice] = useState(0);
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [isDiscounted, setIsDiscounted] = useState(false);
 
@@ -84,11 +82,13 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   const updateCardOptions = (props: CardOptions) => {
-    const { id, title, numPages, numLanguages, extrasPrice, webPrice, discount, remove } = props;
+    const { id, title, numPages, numLanguages, extrasPrice, webPrice, totalPrice, discount, remove } = props;
     setCardOptions((prev) => {
       if (remove) {
         return prev.filter((option) => option.id !== id);
       }
+
+      console.log(totalPrice)
 
       const existingItem = prev.find((item) => item.title === title);
       if (existingItem) {
@@ -108,7 +108,7 @@ export const PriceProvider = ({ children }: Props) => {
       } else {
         return [
           ...prev,
-          { id, title, numPages, numLanguages, extrasPrice, webPrice, discount, remove },
+          { id, title, numPages, numLanguages, extrasPrice, webPrice, totalPrice, discount, remove },
         ];
       }
     });
@@ -123,19 +123,10 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
-    setTotalExtrasPrice(
-      cardOptions.reduce(
-        (accumulator, card) => accumulator + card.extrasPrice,
-        0
-      )
+    setTotalPrice(
+      cardOptions.reduce((accumulator, card) => accumulator + card.totalPrice,0)
     );
-    setTotalPrice(webPrice + totalExtrasPrice);
-
-
-      cardOptions.map(card => setWebPrice(card.webPrice))
-    
-    console.log(cardOptions)
-  }, [cardOptions, webPrice, totalExtrasPrice, isDiscounted]);
+  }, [cardOptions, isDiscounted]);
 
   const addSelectedCard = (id: number) => {
     setSelectedCards((prevSelected) =>
@@ -154,7 +145,6 @@ export const PriceProvider = ({ children }: Props) => {
       value={{
         totalPrice,
         webPrice,
-        totalExtrasPrice,
         cardOptions,
         selectedCards,
         userInfo,

@@ -45,7 +45,7 @@ const ExtrasConfig = ({
           </button>
           <span>Nombre de pàgines</span>
         </label>
-        <NumberInput updateExtras={updateNumPages} />
+        <NumberInput name="pages" updateExtras={updateNumPages} />
       </div>
       <div className="flex gap-5">
         <label className="flex items-center justify-center gap-1.5">
@@ -58,7 +58,7 @@ const ExtrasConfig = ({
           </button>
           <span>Nombre de llenguatges</span>
         </label>
-        <NumberInput updateExtras={updateNumLanguages} />
+        <NumberInput name="lang" updateExtras={updateNumLanguages} />
       </div>
       <InfoModal
         isOpen={isModalOpen}

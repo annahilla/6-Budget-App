@@ -1,8 +1,10 @@
 import { ChangeEvent, useEffect, useState } from "react";
 
 const NumberInput = ({
+  name,
   updateExtras,
 }: {
+  name:string;
   updateExtras: (inputValue: number) => void;
 }) => {
   const [inputValue, setInputValue] = useState(0);

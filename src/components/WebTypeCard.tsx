@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { usePriceContext } from "../context/PriceContext";
 import ExtrasConfig from "./ExtrasConfig";
 import Card from "./Card";
+import { useSearchParams } from "react-router-dom";
 
 const WebTypeCard = ({
   id,
@@ -29,6 +30,9 @@ const WebTypeCard = ({
     isDiscounted
   } = usePriceContext();
 
+  const [searchParams, setSearchParams] = useSearchParams({});
+  const isOptionChecked =  searchParams.get(title) === "true" ? true : false
+
   useEffect(() => {
     if(isDiscounted) {
       setCurrentPrice(price * (1 - discount));
@@ -46,6 +50,7 @@ const WebTypeCard = ({
         numLanguages: numLanguages,
         extrasPrice: (numPages + numLanguages) * 30,
         webPrice: currentPrice,
+        totalPrice: currentPrice + ((numPages + numLanguages) * 30),
         discount: discount,
         remove: false,
       });
@@ -57,15 +62,27 @@ const WebTypeCard = ({
         numLanguages: 0,
         extrasPrice: 0,
         webPrice: 0,
+        totalPrice: 0,
         discount: discount,
         remove: true,
       });
     }
+    updateSearchParams("pages", numPages.toString());
+    updateSearchParams("lang", numLanguages.toString());
   }, [numPages, numLanguages, isChecked, isDiscounted, currentPrice]);
+
+  const updateSearchParams = (param: string, value: string) => {
+    setSearchParams(prev => {
+      prev.set(param, value);
+      return prev;
+    })
+  }
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setIsChecked(checked);
+    updateSearchParams(title, (checked).toString());
+
     if (checked) {
       updateWebPrice(price, discount);
       addSelectedCard(id);
@@ -107,6 +124,7 @@ const WebTypeCard = ({
               onChange={handleCheckboxChange}
               type="checkbox"
               name="checkbox"
+              checked={isOptionChecked}
               id={`checkbox-${id}`}
               className="accent-green"
             />

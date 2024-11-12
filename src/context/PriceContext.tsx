@@ -82,13 +82,23 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   const updateCardOptions = (props: CardOptions) => {
-    const { id, title, numPages, numLanguages, extrasPrice, webPrice, totalPrice, discount, remove } = props;
+    const {
+      id,
+      title,
+      numPages,
+      numLanguages,
+      extrasPrice,
+      webPrice,
+      totalPrice,
+      discount,
+      remove,
+    } = props;
     setCardOptions((prev) => {
       if (remove) {
         return prev.filter((option) => option.id !== id);
       }
 
-      console.log(totalPrice)
+      console.log(totalPrice);
 
       const existingItem = prev.find((item) => item.title === title);
       if (existingItem) {
@@ -99,7 +109,14 @@ export const PriceProvider = ({ children }: Props) => {
         ) {
           return prev.map((item) =>
             item.title === title
-              ? { ...item, numPages, numLanguages, extrasPrice, webPrice }
+              ? {
+                  ...item,
+                  numPages,
+                  numLanguages,
+                  extrasPrice,
+                  webPrice,
+                  totalPrice,
+                }
               : item
           );
         } else {
@@ -108,7 +125,17 @@ export const PriceProvider = ({ children }: Props) => {
       } else {
         return [
           ...prev,
-          { id, title, numPages, numLanguages, extrasPrice, webPrice, totalPrice, discount, remove },
+          {
+            id,
+            title,
+            numPages,
+            numLanguages,
+            extrasPrice,
+            webPrice,
+            totalPrice,
+            discount,
+            remove,
+          },
         ];
       }
     });
@@ -123,8 +150,12 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   useEffect(() => {
+    console.log("setprice");
     setTotalPrice(
-      cardOptions.reduce((accumulator, card) => accumulator + card.totalPrice,0)
+      cardOptions.reduce(
+        (accumulator, card) => accumulator + card.totalPrice,
+        0
+      )
     );
   }, [cardOptions, isDiscounted]);
 

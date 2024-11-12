@@ -2,7 +2,6 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { usePriceContext } from "../context/PriceContext";
 import ExtrasConfig from "./ExtrasConfig";
 import Card from "./Card";
-import { useSearchParams } from "react-router-dom";
 
 const WebTypeCard = ({
   id,
@@ -19,7 +18,7 @@ const WebTypeCard = ({
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [numPages, setNumPages] = useState(0);
-  const [currentPrice, setCurrentPrice] = useState(price)
+  const [currentPrice, setCurrentPrice] = useState(price);
   const [numLanguages, setNumLanguages] = useState(0);
   const {
     updateWebPrice,
@@ -27,19 +26,16 @@ const WebTypeCard = ({
     addSelectedCard,
     removeSelectedCard,
     cardOptions,
-    isDiscounted
+    isDiscounted,
   } = usePriceContext();
 
-  const [searchParams, setSearchParams] = useSearchParams({});
-  const isOptionChecked =  searchParams.get(title) === "true" ? true : false
-
   useEffect(() => {
-    if(isDiscounted) {
+    if (isDiscounted) {
       setCurrentPrice(price * (1 - discount));
     } else {
-      setCurrentPrice(price)
+      setCurrentPrice(price);
     }
-  }, [isDiscounted, cardOptions])
+  }, [isDiscounted, cardOptions]);
 
   useEffect(() => {
     if (isChecked) {
@@ -50,7 +46,7 @@ const WebTypeCard = ({
         numLanguages: numLanguages,
         extrasPrice: (numPages + numLanguages) * 30,
         webPrice: currentPrice,
-        totalPrice: currentPrice + ((numPages + numLanguages) * 30),
+        totalPrice: currentPrice + (numPages + numLanguages) * 30,
         discount: discount,
         remove: false,
       });
@@ -67,21 +63,11 @@ const WebTypeCard = ({
         remove: true,
       });
     }
-    updateSearchParams("pages", numPages.toString());
-    updateSearchParams("lang", numLanguages.toString());
-  }, [numPages, numLanguages, isChecked, isDiscounted, currentPrice]);
-
-  const updateSearchParams = (param: string, value: string) => {
-    setSearchParams(prev => {
-      prev.set(param, value);
-      return prev;
-    })
-  }
+  }, [numPages, numLanguages, isDiscounted, isChecked, currentPrice]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
     setIsChecked(checked);
-    updateSearchParams(title, (checked).toString());
 
     if (checked) {
       updateWebPrice(price, discount);
@@ -114,9 +100,7 @@ const WebTypeCard = ({
           {isDiscounted && (
             <p className="text-xl text-yellow-500">Estalvia un 20%</p>
           )}
-          <span className="font-extrabold text-4xl">
-            {currentPrice}€
-          </span>
+          <span className="font-extrabold text-4xl">{currentPrice}€</span>
         </div>
         <div>
           <div className="flex items-center gap-2">
@@ -124,7 +108,7 @@ const WebTypeCard = ({
               onChange={handleCheckboxChange}
               type="checkbox"
               name="checkbox"
-              checked={isOptionChecked}
+              checked={isChecked}
               id={`checkbox-${id}`}
               className="accent-green"
             />

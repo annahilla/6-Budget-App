@@ -5,9 +5,12 @@ import { usePriceContext } from "../context/PriceContext";
 import options from "../data/options.json";
 import FormCard from "../components/FormCard";
 import ToggleButton from "../components/ToggleButton";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 const BudgetPage = () => {
   const { selectedCards } = usePriceContext();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   return (
     <>

@@ -18,14 +18,24 @@ const WebTypeCard = ({
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [numPages, setNumPages] = useState(0);
+  const [currentPrice, setCurrentPrice] = useState(price)
   const [numLanguages, setNumLanguages] = useState(0);
   const {
     updateWebPrice,
     updateCardOptions,
     addSelectedCard,
     removeSelectedCard,
-    isDiscounted,
+    cardOptions,
+    isDiscounted
   } = usePriceContext();
+
+  useEffect(() => {
+    if(isDiscounted) {
+      setCurrentPrice(price * (1 - discount));
+    } else {
+      setCurrentPrice(price)
+    }
+  }, [isDiscounted, cardOptions])
 
   useEffect(() => {
     if (isChecked) {
@@ -35,6 +45,8 @@ const WebTypeCard = ({
         numPages: numPages,
         numLanguages: numLanguages,
         extrasPrice: (numPages + numLanguages) * 30,
+        webPrice: currentPrice,
+        discount: discount,
         remove: false,
       });
     } else {
@@ -44,10 +56,12 @@ const WebTypeCard = ({
         numPages: 0,
         numLanguages: 0,
         extrasPrice: 0,
+        webPrice: 0,
+        discount: discount,
         remove: true,
       });
     }
-  }, [numPages, numLanguages, isChecked]);
+  }, [numPages, numLanguages, isChecked, isDiscounted, currentPrice]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
@@ -84,7 +98,7 @@ const WebTypeCard = ({
             <p className="text-xl text-yellow-500">Estalvia un 20%</p>
           )}
           <span className="font-extrabold text-4xl">
-            {isDiscounted ? price * (1 - discount) : price}€
+            {currentPrice}€
           </span>
         </div>
         <div>

@@ -32,7 +32,7 @@ const SavedBudgets = () => {
       const dateA = new Date(a.date).getTime();
       const dateB = new Date(b.date).getTime();
 
-      return isAscendingByDate ? dateA - dateB : dateB - dateA; // canvia l'ordenació
+      return isAscendingByDate ? dateA - dateB : dateB - dateA;
     });
     setSortedUsers(sortedUsers);
     setIsAscendingByDate((prev) => !prev);

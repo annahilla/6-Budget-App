@@ -57,6 +57,8 @@ export interface CardOptions {
   numPages: number;
   numLanguages: number;
   extrasPrice: number;
+  webPrice: number;
+  discount: number;
   remove: boolean;
 }
 
@@ -82,20 +84,22 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   const updateCardOptions = (props: CardOptions) => {
-    const { id, title, numPages, numLanguages, extrasPrice, remove } = props;
+    const { id, title, numPages, numLanguages, extrasPrice, webPrice, discount, remove } = props;
     setCardOptions((prev) => {
       if (remove) {
         return prev.filter((option) => option.id !== id);
       }
+
       const existingItem = prev.find((item) => item.title === title);
       if (existingItem) {
         if (
           existingItem.numPages !== numPages ||
-          existingItem.numLanguages !== numLanguages
+          existingItem.numLanguages !== numLanguages ||
+          existingItem.webPrice !== webPrice
         ) {
           return prev.map((item) =>
             item.title === title
-              ? { ...item, numPages, numLanguages, extrasPrice }
+              ? { ...item, numPages, numLanguages, extrasPrice, webPrice }
               : item
           );
         } else {
@@ -104,7 +108,7 @@ export const PriceProvider = ({ children }: Props) => {
       } else {
         return [
           ...prev,
-          { id, title, numPages, numLanguages, extrasPrice, remove },
+          { id, title, numPages, numLanguages, extrasPrice, webPrice, discount, remove },
         ];
       }
     });
@@ -126,7 +130,12 @@ export const PriceProvider = ({ children }: Props) => {
       )
     );
     setTotalPrice(webPrice + totalExtrasPrice);
-  }, [cardOptions, webPrice, totalExtrasPrice]);
+
+
+      cardOptions.map(card => setWebPrice(card.webPrice))
+    
+    console.log(cardOptions)
+  }, [cardOptions, webPrice, totalExtrasPrice, isDiscounted]);
 
   const addSelectedCard = (id: number) => {
     setSelectedCards((prevSelected) =>

@@ -1,15 +1,14 @@
-import WebTypeCard from "../components/WebTypeCard";
+import WebOptionsCard from "../components/WebOptionsCard";
 import Header from "../components/Header";
 import PriceCount from "../components/PriceCount";
-import { usePriceContext } from "../context/PriceContext";
 import options from "../data/options.json";
 import FormCard from "../components/FormCard";
 import ToggleButton from "../components/ToggleButton";
+import { usePriceContext } from "../context/PriceContext";
 
 const BudgetPage = () => {
+  const { totalPrice } = usePriceContext();
 
-  const { selectedCards } = usePriceContext();
-  
   return (
     <>
       <Header title="Aconsegueix la millor qualitat" />
@@ -26,7 +25,7 @@ const BudgetPage = () => {
               price: number;
               discount: number;
             }) => (
-              <WebTypeCard
+              <WebOptionsCard
                 key={option.id}
                 id={option.id}
                 title={option.title}
@@ -38,7 +37,7 @@ const BudgetPage = () => {
           )}
       </div>
       <PriceCount />
-      {selectedCards.length > 0 && <FormCard />}
+      {totalPrice > 0 && <FormCard />}
     </>
   );
 };

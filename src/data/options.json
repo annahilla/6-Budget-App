@@ -2,14 +2,14 @@
     {
         "id": 1,
         "title": "Seo",
-        "description": "Programació d'una web responsive completa",
+        "description": "Optimització del posicionament en cercadors.",
         "price": 300,
         "discount": 0.2
     },
     {
         "id": 2,
         "title": "Ads",
-        "description": "Programació d'una web responsive completa",
+        "description": "Gestió estratègica de campanyes publicitàries online.",
         "price": 400,
         "discount": 0.2
     },

@@ -6,7 +6,7 @@ import { IoSearch } from "react-icons/io5";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const SavedBudgets = () => {
-  const { userInfo } = usePriceContext();
+  const { userInfo, numPages, numLangs } = usePriceContext();
   const [sortedUsers, setSortedUsers] = useState(userInfo);
   const [isAscendingByName, setIsAscendingByName] = useState(false);
   const [isAscendingByDate, setIsAscendingByDate] = useState(false);
@@ -132,18 +132,18 @@ const SavedBudgets = () => {
                 {user.cardOptions.map((option) => {
                   let details = "";
 
-                  if (option.numPages > 0 && option.numLanguages > 0) {
-                    details = `${option.numPages} pàgines, ${option.numLanguages} llenguatges`;
-                  } else if (option.numPages > 0) {
-                    details = `${option.numPages} pàgines`;
-                  } else if (option.numLanguages > 0) {
-                    details = `${option.numLanguages} llenguatges`;
+                  if (numPages > 0 && numLangs > 0) {
+                    details = `${numPages} pàgines, ${numLangs} llenguatges`;
+                  } else if (numPages > 0) {
+                    details = `${numPages} pàgines`;
+                  } else if (numLangs > 0) {
+                    details = `${numLangs} llenguatges`;
                   }
 
                   return (
                     <li key={option.title}>
                       {option.title}
-                      {details && ` (${details})`}
+                      {option.id === 3 && ` (${details})`}
                     </li>
                   );
                 })}

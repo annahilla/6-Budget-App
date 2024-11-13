@@ -1,22 +1,14 @@
 import { useState } from "react";
 import NumberInput from "./NumberInput";
 import { MdInfoOutline } from "react-icons/md";
-import InfoModal from "./InfoModal";
+import Modal from "./Modal";
+import { usePriceContext } from "../context/PriceContext";
 
-const ExtrasConfig = ({
-  updateNumPages,
-  updateNumLanguages,
-  initialPages,
-  initialLanguages,
-}: {
-  updateNumPages: (inputValue: number) => void;
-  updateNumLanguages: (inputValue: number) => void;
-  initialPages: number;
-  initialLanguages: number;
-}) => {
+const ExtrasConfig = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const { updateNumLangs, updateNumPages } = usePriceContext();
 
   const closeModal = () => setIsModalOpen(false);
 
@@ -49,10 +41,7 @@ const ExtrasConfig = ({
           </button>
           <span>Nombre de pàgines</span>
         </label>
-        <NumberInput
-          initialValue={initialPages}
-          updateExtras={updateNumPages}
-        />
+        <NumberInput updateExtras={updateNumPages} />
       </div>
       <div className="flex gap-5">
         <label className="flex items-center justify-center gap-1.5">
@@ -65,12 +54,9 @@ const ExtrasConfig = ({
           </button>
           <span>Nombre de llenguatges</span>
         </label>
-        <NumberInput
-          initialValue={initialLanguages}
-          updateExtras={updateNumLanguages}
-        />
+        <NumberInput updateExtras={updateNumLangs} />
       </div>
-      <InfoModal
+      <Modal
         isOpen={isModalOpen}
         closeModal={closeModal}
         title={title}

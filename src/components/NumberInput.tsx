@@ -2,12 +2,10 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 const NumberInput = ({
   updateExtras,
-  initialValue,
 }: {
   updateExtras: (inputValue: number) => void;
-  initialValue: number;
 }) => {
-  const [inputValue, setInputValue] = useState(initialValue);
+  const [inputValue, setInputValue] = useState(0);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const newValue = parseInt(event.target.value, 10) || 0;

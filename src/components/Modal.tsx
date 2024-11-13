@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-const InfoModal = ({
+const Modal = ({
   isOpen,
   closeModal,
   title,
@@ -44,4 +44,4 @@ const InfoModal = ({
   );
 };
 
-export default InfoModal;
+export default Modal;

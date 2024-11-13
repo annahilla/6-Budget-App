@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { usePriceContext } from "../context/PriceContext";
+import { usePriceContext } from "../../context/PriceContext";
 
 const ToggleButton = () => {
   const [isToggled, setIsToggled] = useState(false);

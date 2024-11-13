@@ -2,28 +2,34 @@ import { ChangeEvent, useEffect, useState } from "react";
 
 const NumberInput = ({
   updateExtras,
+  value,
 }: {
   updateExtras: (inputValue: number) => void;
+  value: number;
 }) => {
-  const [inputValue, setInputValue] = useState(0);
+  const [inputValue, setInputValue] = useState(value);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = parseInt(event.target.value, 10) || 0;
+    const newValue = Number(event.target.value);
     setInputValue(newValue);
     updateExtras(newValue);
   };
 
   const decreaseInputValue = () => {
-    setInputValue((prev) => (prev === 0 ? 0 : prev - 1));
+    const newValue = Math.max(0, inputValue - 1);
+    setInputValue(newValue);
+    updateExtras(newValue);
   };
 
   const increaseInputValue = () => {
-    setInputValue((prev) => prev + 1);
+    const newValue = inputValue + 1;
+    setInputValue(newValue);
+    updateExtras(newValue);
   };
 
   useEffect(() => {
-    updateExtras(inputValue);
-  }, [inputValue]);
+    setInputValue(value);
+  }, [value]);
 
   return (
     <div className="flex items-center justify-center gap-2">

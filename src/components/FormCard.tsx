@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import Card from "./Card";
-import Input from "./Input";
+import Card from "./ui/Card";
+import Input from "./ui/Input";
 import { FaArrowRight } from "react-icons/fa";
 import { usePriceContext, User } from "../context/PriceContext";
 import SavedBudgets from "./SavedBudgets";

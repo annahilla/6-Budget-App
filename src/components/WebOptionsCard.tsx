@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { usePriceContext } from "../context/PriceContext";
 import ExtrasConfig from "./ExtrasConfig";
-import Card from "./Card";
+import Card from "./ui/Card";
 
 const WebOptionsCard = ({
   id,
@@ -38,6 +38,11 @@ const WebOptionsCard = ({
       remove: !isChecked,
     });
   }, [isChecked]);
+
+  useEffect(() => {
+    const optionExists = cardOptions.some((option) => option.id === id);
+    setIsChecked(optionExists);
+  }, [cardOptions, id]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;

@@ -90,6 +90,10 @@ export const PriceProvider = ({ children }: Props) => {
     const { id, title, webPrice, discount, remove } = props;
     setCardOptions((prev) => {
       if (remove) {
+        if (id === 3) {
+          setNumLangs(0);
+          setNumPages(0);
+        }
         return prev.filter((option) => option.id !== id);
       } else {
         return [

@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useState } from "react";
+import { ReactNode, useContext, useMemo, useState } from "react";
 import { createContext } from "react";
 import { useSearchParams } from "react-router-dom";
 
@@ -8,12 +8,13 @@ interface PriceContextType {
   cardOptions: CardOptions[];
   userInfo: User[];
   isDiscounted: boolean;
+  searchParams: URLSearchParams;
   updateWebPrice: (amount: number, discount: number) => void;
   updateCardOptions: (props: CardOptions) => void;
   updateUserInfo: (props: User) => void;
   toggleDiscount: () => void;
   updateSearchParams: (params: string, value: string) => void;
-  searchParams: URLSearchParams;
+  deleteLangsAndPages: () => void;
 }
 
 const PriceContext = createContext<PriceContextType>({
@@ -22,12 +23,13 @@ const PriceContext = createContext<PriceContextType>({
   cardOptions: [],
   userInfo: [],
   isDiscounted: false,
+  searchParams: new URLSearchParams(),
   updateWebPrice: () => {},
   updateCardOptions: () => {},
   updateUserInfo: () => {},
   toggleDiscount: () => {},
   updateSearchParams: () => {},
-  searchParams: new URLSearchParams(),
+  deleteLangsAndPages: () => {},
 });
 
 export const usePriceContext = () => {
@@ -58,15 +60,12 @@ interface Props {
 
 export const PriceProvider = ({ children }: Props) => {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const pages = searchParams.get("pages");
-  const langs = searchParams.get("langs");
-
   const [cardOptions, setCardOptions] = useState<CardOptions[]>([]);
   const [userInfo, setUserInfo] = useState<User[]>([]);
   const [webPrice, setWebPrice] = useState(0);
   const [isDiscounted, setIsDiscounted] = useState(false);
-
+  const pages = searchParams.get("pages");
+  const langs = searchParams.get("langs");
   const pricePerExtra = 30;
 
   const updateSearchParams = (params: string, value: string) => {
@@ -77,6 +76,15 @@ export const PriceProvider = ({ children }: Props) => {
       } else {
         updatedParams.set(params, value);
       }
+      return updatedParams;
+    });
+  };
+
+  const deleteLangsAndPages = () => {
+    setSearchParams((prev) => {
+      const updatedParams = new URLSearchParams(prev);
+      updatedParams.delete("pages");
+      updatedParams.delete("langs");
       return updatedParams;
     });
   };
@@ -95,10 +103,9 @@ export const PriceProvider = ({ children }: Props) => {
     setCardOptions((prev) => {
       let updatedOptions;
       if (remove) {
-        updatedOptions = prev.filter((option) => option.id !== id)
-
+        updatedOptions = prev.filter((option) => option.id !== id);
       } else {
-        updatedOptions = [...prev.filter((option) => option.id !== id), props]
+        updatedOptions = [...prev.filter((option) => option.id !== id), props];
       }
       return updatedOptions;
     });
@@ -112,18 +119,15 @@ export const PriceProvider = ({ children }: Props) => {
     ]);
   };
 
-  const totalPrice = (() => {
-    const webPriceCalculation = cardOptions.reduce((accumulator, card) => {
-      const discountedPrice = isDiscounted
-        ? card.webPrice * (1 - card.discount)
-        : card.webPrice;
-      return accumulator + discountedPrice;
-    }, 0);
-
+  const totalPrice = useMemo(() => {
+    const webPriceCalculation = cardOptions.reduce(
+      (accumulator, card) => accumulator + card.webPrice,
+      0
+    );
     const extrasCalculation = (Number(langs) + Number(pages)) * pricePerExtra;
 
     return webPriceCalculation + extrasCalculation;
-  })();
+  }, [cardOptions, langs, pages, pricePerExtra]);
 
   return (
     <PriceContext.Provider
@@ -139,6 +143,7 @@ export const PriceProvider = ({ children }: Props) => {
         updateUserInfo,
         toggleDiscount,
         updateSearchParams,
+        deleteLangsAndPages,
       }}
     >
       {children}

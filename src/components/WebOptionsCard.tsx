@@ -20,11 +20,13 @@ const WebOptionsCard = ({
     updateWebPrice,
     updateCardOptions,
     updateSearchParams,
+    deleteLangsAndPages,
     isDiscounted,
-    searchParams
+    searchParams,
   } = usePriceContext();
   const [currentPrice, setCurrentPrice] = useState(price);
-  const isChecked = searchParams.has(title);
+  const isChecked = searchParams.get(title) === "true";
+  const hasWeb = searchParams.get("Web") === "true";
 
   useEffect(() => {
     if (isDiscounted) {
@@ -42,7 +44,7 @@ const WebOptionsCard = ({
       discount,
       remove: !isChecked,
     });
-  }, [isChecked, currentPrice])
+  }, [isChecked, currentPrice]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
@@ -51,6 +53,12 @@ const WebOptionsCard = ({
     updateWebPrice(priceChange, discount);
     updateSearchParams(title, checked ? "true" : "false");
   };
+
+  useEffect(() => {
+    if (!hasWeb) {
+      deleteLangsAndPages();
+    }
+  }, [searchParams]);
 
   const checkedStyles = isChecked && "border-2 border-green justify-start";
 

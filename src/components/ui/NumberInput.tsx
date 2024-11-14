@@ -3,14 +3,16 @@ import { usePriceContext } from "../../context/PriceContext";
 
 const NumberInput = ({
   value,
-  name
+  name,
 }: {
   value: string | null;
   name: string;
 }) => {
   const { updateSearchParams } = usePriceContext();
- 
-  const [inputValue, setInputValue] = useState(isNaN(Number(value)) ? 0 : Number(value));
+
+  const [inputValue, setInputValue] = useState(
+    isNaN(Number(value)) ? 0 : Number(value)
+  );
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     updateSearchParams(name, event.target.value);
@@ -18,7 +20,12 @@ const NumberInput = ({
 
   const decreaseInputValue = () => {
     let newValue;
-    inputValue <= 0 ? newValue = 0 : newValue = inputValue - 1;
+
+    if (inputValue === 0) {
+      newValue = 0;
+    } else {
+      newValue = inputValue - 1;
+    }
 
     setInputValue(newValue);
     updateSearchParams(name, newValue.toString());

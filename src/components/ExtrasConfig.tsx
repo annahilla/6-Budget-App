@@ -8,8 +8,7 @@ const ExtrasConfig = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const { searchParams } =
-    usePriceContext();
+  const { searchParams } = usePriceContext();
   const pages = searchParams.get("pages");
   const langs = searchParams.get("langs");
 

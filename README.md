@@ -1,50 +1,54 @@
-# React + TypeScript + Vite
+# Budget Calculation App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Introduction
 
-Currently, two official plugins are available:
+This is a budget calculation app project built with React and Tailwind CSS. The app allows users to input different customization options for a website and instantly calculates the total price based on their selections. The user interface is interactive, with dynamic fields such as checkboxes, input fields, and buttons, enabling a smooth experience for budget adjustments. Additionally, users can save their budget and share it by sending the URL with the saved budget.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologies used
 
-## Expanding the ESLint configuration
+- **HTML**: For structuring the content.
+- **Tailwind**: For styling and layout.
+- **React**: For implementing app logic and dynamic style switching.
+- **Vite**: For setting up the React project with fast development and optimized build.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+- **Interactive Inputs:** Users can select options using checkboxes, input fields, and buttons.
+- **Real-Time Budget Calculation:** The app calculates the total price dynamically as the user selects different customization options.
+- **Save Budget:** Users can save the calculated budget by clicking a button, and the app will store the budget details in the browser’s local storage.
+- **Shareable URL:** Once a budget is saved, the app generates a unique URL containing the budget parameters, which users can share to load the same budget on any device.
+- **Responsive Design:** The app adjusts its layout based on the user's device to provide an optimal experience on any screen.
+- **Clear Structure:** The application is well-organized with reusable components, ensuring scalability and maintainability.
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Setup
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+1. Clone the repository:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+   ```bash
+   git clone https://github.com/annahilla/6-Budget-App
+   ```
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+2. Open folder on your code editor:
+
+   ```bash
+   cd 6-Budget-App && code .
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+4. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+## Usage
+
+- The app allows users to adjust various options related to the website's customization, such as the number of pages and languages.
+- The total price is recalculated dynamically based on user inputs, and the updated budget is displayed in real time.
+- Budgets can be saved by filling a form, and the list of saved budgets will show below. You can sort budgets by name, date and you can also search the budgets using a searchbar.
+- The app also generates a shareable URL with the saved budget, allowing users to share the link and load the same budget calculation on any device.

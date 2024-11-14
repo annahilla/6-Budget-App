@@ -16,15 +16,15 @@ const WebOptionsCard = ({
   price: number;
   discount: number;
 }) => {
-  const [isChecked, setIsChecked] = useState(false);
-  const [currentPrice, setCurrentPrice] = useState(price);
   const {
     updateWebPrice,
     updateCardOptions,
     updateSearchParams,
-    cardOptions,
     isDiscounted,
+    searchParams
   } = usePriceContext();
+  const [currentPrice, setCurrentPrice] = useState(price);
+  const isChecked = searchParams.has(title);
 
   useEffect(() => {
     if (isDiscounted) {
@@ -32,7 +32,7 @@ const WebOptionsCard = ({
     } else {
       setCurrentPrice(price);
     }
-  }, [isDiscounted, cardOptions]);
+  }, [isDiscounted]);
 
   useEffect(() => {
     updateCardOptions({
@@ -42,24 +42,14 @@ const WebOptionsCard = ({
       discount,
       remove: !isChecked,
     });
-  }, [isChecked]);
-
-  useEffect(() => {
-    const optionExists = cardOptions.some((option) => option.id === id);
-    setIsChecked(optionExists);
-  }, [cardOptions, id]);
+  }, [isChecked, currentPrice])
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;
-    setIsChecked(checked);
+    const priceChange = checked ? currentPrice : -currentPrice;
 
-    if (checked) {
-      updateWebPrice(price, discount);
-      updateSearchParams(title, "true");
-    } else {
-      updateWebPrice(-price, discount);
-      updateSearchParams(title, "false");
-    }
+    updateWebPrice(priceChange, discount);
+    updateSearchParams(title, checked ? "true" : "false");
   };
 
   const checkedStyles = isChecked && "border-2 border-green justify-start";
@@ -67,9 +57,9 @@ const WebOptionsCard = ({
   return (
     <Card styles={checkedStyles}>
       <div className="flex flex-col justify-start gap-10 items-center md:flex-row md:justify-between md:h-fit md:text-left">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 max-w-72">
           <h3 className="font-bold text-2xl">{title}</h3>
-          <p className="md:w-72">{description}</p>
+          <p>{description}</p>
         </div>
         <div className="font-bold text-3xl flex flex-col items-center justify-center gap-2">
           {isDiscounted && (

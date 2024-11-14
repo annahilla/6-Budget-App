@@ -1,34 +1,37 @@
 import { ChangeEvent, useEffect, useState } from "react";
+import { usePriceContext } from "../../context/PriceContext";
 
 const NumberInput = ({
-  updateExtras,
   value,
+  name
 }: {
-  updateExtras: (inputValue: number) => void;
-  value: number;
+  value: string | null;
+  name: string;
 }) => {
-  const [inputValue, setInputValue] = useState(value);
+  const { updateSearchParams } = usePriceContext();
+ 
+  const [inputValue, setInputValue] = useState(isNaN(Number(value)) ? 0 : Number(value));
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const newValue = Number(event.target.value);
-    setInputValue(newValue);
-    updateExtras(newValue);
+    updateSearchParams(name, event.target.value);
   };
 
   const decreaseInputValue = () => {
-    const newValue = Math.max(0, inputValue - 1);
+    let newValue;
+    inputValue <= 0 ? newValue = 0 : newValue = inputValue - 1;
+
     setInputValue(newValue);
-    updateExtras(newValue);
+    updateSearchParams(name, newValue.toString());
   };
 
   const increaseInputValue = () => {
     const newValue = inputValue + 1;
     setInputValue(newValue);
-    updateExtras(newValue);
+    updateSearchParams(name, newValue.toString());
   };
 
   useEffect(() => {
-    setInputValue(value);
+    setInputValue(Number(value));
   }, [value]);
 
   return (
@@ -44,7 +47,7 @@ const NumberInput = ({
         className="w-10 text-center border rounded border-gray-400 outline-none"
         type="number"
         onChange={handleChange}
-        value={inputValue}
+        value={value ? value : "0"}
       />
       <button
         onClick={increaseInputValue}

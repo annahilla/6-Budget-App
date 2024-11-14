@@ -6,10 +6,12 @@ import { IoSearch } from "react-icons/io5";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const SavedBudgets = () => {
-  const { userInfo, numPages, numLangs } = usePriceContext();
+  const { userInfo, searchParams } = usePriceContext();
   const [sortedUsers, setSortedUsers] = useState(userInfo);
   const [isAscendingByName, setIsAscendingByName] = useState(false);
   const [isAscendingByDate, setIsAscendingByDate] = useState(false);
+  const numPages = Number(searchParams.get("pages"));
+  const numLangs = Number(searchParams.get("langs"));
 
   useEffect(() => {
     setSortedUsers(userInfo);

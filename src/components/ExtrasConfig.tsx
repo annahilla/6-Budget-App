@@ -8,8 +8,10 @@ const ExtrasConfig = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const { updateNumLangs, updateNumPages, numLangs, numPages } =
+  const { searchParams } =
     usePriceContext();
+  const pages = searchParams.get("pages");
+  const langs = searchParams.get("langs");
 
   const closeModal = () => setIsModalOpen(false);
 
@@ -42,7 +44,7 @@ const ExtrasConfig = () => {
           </button>
           <span>Nombre de pàgines</span>
         </label>
-        <NumberInput updateExtras={updateNumPages} value={numPages} />
+        <NumberInput name="pages" value={pages} />
       </div>
       <div className="flex gap-5">
         <label className="flex items-center justify-center gap-1.5">
@@ -55,7 +57,7 @@ const ExtrasConfig = () => {
           </button>
           <span>Nombre de llenguatges</span>
         </label>
-        <NumberInput updateExtras={updateNumLangs} value={numLangs} />
+        <NumberInput name="langs" value={langs} />
       </div>
       <Modal
         isOpen={isModalOpen}

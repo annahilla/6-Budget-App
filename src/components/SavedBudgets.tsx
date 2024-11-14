@@ -98,9 +98,6 @@ const SavedBudgets = () => {
               className="flex items-center justify-center gap-1 cursor-pointer"
             >
               Import
-              <span className="pt-1">
-                <BiDownArrow size={14} />
-              </span>
             </button>
           </li>
           <li className="cursor-pointer hover:text-black active:text-black">

@@ -21,11 +21,11 @@ const WebOptionsCard = ({
     updateCardOptions,
     updateSearchParams,
     deleteLangsAndPages,
-    isDiscounted,
     searchParams,
   } = usePriceContext();
   const [currentPrice, setCurrentPrice] = useState(price);
   const isChecked = searchParams.get(title) === "true";
+  const isDiscounted = searchParams.get("annual") === "true";
   const hasWeb = searchParams.get("Web") === "true";
 
   useEffect(() => {

@@ -63,7 +63,7 @@ export const PriceProvider = ({ children }: Props) => {
   const [cardOptions, setCardOptions] = useState<CardOptions[]>([]);
   const [userInfo, setUserInfo] = useState<User[]>([]);
   const [webPrice, setWebPrice] = useState(0);
-  const [isDiscounted, setIsDiscounted] = useState(false);
+  const isDiscounted = searchParams.get("annual") === "true";
   const pages = searchParams.get("pages");
   const langs = searchParams.get("langs");
   const pricePerExtra = 30;
@@ -90,7 +90,11 @@ export const PriceProvider = ({ children }: Props) => {
   };
 
   const toggleDiscount = () => {
-    setIsDiscounted((prev) => !prev);
+    if (isDiscounted) {
+      updateSearchParams("annual", "false");
+    } else {
+      updateSearchParams("annual", "true");
+    }
   };
 
   const updateWebPrice = (amount: number) => {

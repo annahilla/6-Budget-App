@@ -2,8 +2,11 @@ import { useState } from "react";
 import { usePriceContext } from "../../context/PriceContext";
 
 const ToggleButton = () => {
-  const [isToggled, setIsToggled] = useState(false);
-  const { toggleDiscount } = usePriceContext();
+  const { toggleDiscount, searchParams } = usePriceContext();
+  const isDiscounted = searchParams.get("annual");
+  const [isToggled, setIsToggled] = useState(
+    isDiscounted !== null ? isDiscounted : false
+  );
 
   const handleToggle = () => {
     setIsToggled((prev) => !prev);

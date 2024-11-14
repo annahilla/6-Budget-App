@@ -18,8 +18,13 @@ const WebOptionsCard = ({
 }) => {
   const [isChecked, setIsChecked] = useState(false);
   const [currentPrice, setCurrentPrice] = useState(price);
-  const { updateWebPrice, updateCardOptions, cardOptions, isDiscounted } =
-    usePriceContext();
+  const {
+    updateWebPrice,
+    updateCardOptions,
+    updateSearchParams,
+    cardOptions,
+    isDiscounted,
+  } = usePriceContext();
 
   useEffect(() => {
     if (isDiscounted) {
@@ -31,10 +36,10 @@ const WebOptionsCard = ({
 
   useEffect(() => {
     updateCardOptions({
-      id: id,
-      title: title,
+      id,
+      title,
       webPrice: isChecked ? currentPrice : 0,
-      discount: discount,
+      discount,
       remove: !isChecked,
     });
   }, [isChecked]);
@@ -50,8 +55,10 @@ const WebOptionsCard = ({
 
     if (checked) {
       updateWebPrice(price, discount);
+      updateSearchParams(title, "true");
     } else {
       updateWebPrice(-price, discount);
+      updateSearchParams(title, "false");
     }
   };
 
@@ -59,7 +66,7 @@ const WebOptionsCard = ({
 
   return (
     <Card styles={checkedStyles}>
-      <div className="flex flex-col justify-start gap-10 items-center w-100 md:flex-row md:justify-between md:h-fit md:text-left">
+      <div className="flex flex-col justify-start gap-10 items-center md:flex-row md:justify-between md:h-fit md:text-left">
         <div className="flex flex-col gap-2">
           <h3 className="font-bold text-2xl">{title}</h3>
           <p className="md:w-72">{description}</p>

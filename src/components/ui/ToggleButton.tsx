@@ -3,11 +3,11 @@ import { usePriceContext } from "../../context/PriceContext";
 
 const ToggleButton = () => {
   const [isToggled, setIsToggled] = useState(false);
-  const { updateIsDiscounted } = usePriceContext();
+  const { toggleDiscount } = usePriceContext();
 
   const handleToggle = () => {
     setIsToggled((prev) => !prev);
-    updateIsDiscounted();
+    toggleDiscount();
   };
 
   return (

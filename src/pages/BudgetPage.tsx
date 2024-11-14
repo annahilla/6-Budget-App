@@ -4,13 +4,13 @@ import PriceCount from "../components/PriceCount";
 import options from "../data/options.json";
 import FormCard from "../components/FormCard";
 import ToggleButton from "../components/ui/ToggleButton";
-import { PriceProvider, usePriceContext } from "../context/PriceContext";
+import { usePriceContext } from "../context/PriceContext";
 
 const BudgetPage = () => {
   const { totalPrice } = usePriceContext();
 
   return (
-    <PriceProvider>
+    <>
       <Header title="Aconsegueix la millor qualitat" />
       <div className="flex items-center justify-center m-auto py-10">
         <ToggleButton />
@@ -38,7 +38,7 @@ const BudgetPage = () => {
       </div>
       <PriceCount />
       {totalPrice > 0 && <FormCard />}
-    </PriceProvider>
+    </>
   );
 };
 

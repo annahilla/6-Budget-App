@@ -14,11 +14,11 @@ const ToggleButton = () => {
   };
 
   return (
-    <div className="flex items-center justify-center gap-5 text-md font-semibold">
-      <p>Pagament mensual</p>
+    <div className="flex items-center justify-center text-md gap-2 font-semibold sm:gap-5">
+      <p className="text-center">Pagament mensual</p>
       <button
         onClick={handleToggle}
-        className={`w-16 h-8 flex items-center rounded-full p-1 ${
+        className={`w-16 h-8 flex flex-shrink-0 items-center rounded-full p-1 ${
           isToggled ? "bg-green" : "bg-gray-300"
         } transition-colors duration-300`}
       >
@@ -28,7 +28,7 @@ const ToggleButton = () => {
           } transition-transform duration-300`}
         ></div>
       </button>
-      <p>Pagament anual</p>
+      <p className="text-center">Pagament anual</p>
     </div>
   );
 };

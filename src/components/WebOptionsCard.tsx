@@ -27,6 +27,8 @@ const WebOptionsCard = ({
   const isChecked = searchParams.get(title) === "true";
   const isDiscounted = searchParams.get("annual") === "true";
   const hasWeb = searchParams.get("Web") === "true";
+  const pages = searchParams.get("pages");
+  const langs = searchParams.get("langs");
 
   useEffect(() => {
     if (isDiscounted) {
@@ -42,9 +44,11 @@ const WebOptionsCard = ({
       title,
       webPrice: isChecked ? currentPrice : 0,
       discount,
+      pages,
+      langs,
       remove: !isChecked,
     });
-  }, [isChecked, currentPrice]);
+  }, [isChecked, pages, langs, currentPrice]);
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const checked = event.target.checked;

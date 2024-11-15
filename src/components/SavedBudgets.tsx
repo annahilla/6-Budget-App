@@ -6,19 +6,17 @@ import { IoSearch } from "react-icons/io5";
 import { ChangeEvent, useEffect, useState } from "react";
 
 const SavedBudgets = () => {
-  const { userInfo, searchParams } = usePriceContext();
+  const { userInfo } = usePriceContext();
   const [sortedUsers, setSortedUsers] = useState(userInfo);
   const [isAscendingByName, setIsAscendingByName] = useState(false);
   const [isAscendingByDate, setIsAscendingByDate] = useState(false);
-  const numPages = Number(searchParams.get("pages"));
-  const numLangs = Number(searchParams.get("langs"));
 
   useEffect(() => {
     setSortedUsers(userInfo);
   }, [userInfo]);
 
   const searchItem = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
+    const value = event.target.value.toLowerCase();
     const result = userInfo.filter(
       (user) =>
         user.name.toLowerCase().includes(value) ||
@@ -130,19 +128,23 @@ const SavedBudgets = () => {
               <ul className="px-5 lg:list-disc">
                 {user.cardOptions.map((option) => {
                   let details = "";
+                  const pages = Number(option.pages);
+                  const langs = Number(option.langs);
 
-                  if (numPages > 0 && numLangs > 0) {
-                    details = `${numPages} pàgines, ${numLangs} llenguatges`;
-                  } else if (numPages > 0) {
-                    details = `${numPages} pàgines`;
-                  } else if (numLangs > 0) {
-                    details = `${numLangs} llenguatges`;
+                  if (option.pages !== null && option.langs !== null) {
+                    if (pages > 0 && langs > 0) {
+                      details = `(${pages} pàgines, ${langs} llenguatges)`;
+                    } else if (pages > 0) {
+                      details = `(${pages} pàgines)`;
+                    } else if (langs > 0) {
+                      details = `(${langs} llenguatges)`;
+                    }
                   }
 
                   return (
                     <li key={option.title}>
                       {option.title}
-                      {option.id === 3 && ` (${details})`}
+                      {option.id === 3 && `${details}`}
                     </li>
                   );
                 })}

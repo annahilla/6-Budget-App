@@ -51,6 +51,8 @@ export interface CardOptions {
   title: string;
   webPrice: number;
   discount: number;
+  pages: string | null;
+  langs: string | null;
   remove: boolean;
 }
 
